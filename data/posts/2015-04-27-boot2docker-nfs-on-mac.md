@@ -1,0 +1,52 @@
+---
+path: "/boot2docker-nfs-on-mac"
+date: "2015-04-27"
+title: "Boot2docker with NFS on OSX"
+---
+![](/images/2015/04/homepage-docker-logo-1.png)
+Boot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is `vboxfs`, which can be an issue.
+
+
+`Vboxfs` is really slow and you may encounter access and performance issues.
+
+A good solution is to use `nfs` to share your folders.
+
+## How to share your folders
+
+On OSX, run the following comands:
+
+``` shell
+sudo echo "/Users -mapall=`whoami`:staff `boot2docker ip`" | sudo tee -a /etc/exports
+```
+
+``` shell
+sudo nfsd restart
+```
+
+## To mount a folder on boot2docker VM
+
+Connect yourself to your boot2docker vm using ssh
+```shell
+boot2docker ssh
+```
+
+Then run the following:
+
+``` shell
+sudo su
+echo "#! /bin/sh
+sleep 1
+sudo umount /Users
+sudo /usr/local/etc/init.d/nfs-client start
+sudo mount 192.168.59.3:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp" > /var/lib/boot2docker/bootlocal.sh
+sudo chmod a+x /var/lib/boot2docker/bootlocal.sh
+exit
+exit
+```
+
+Now that the above is done, restart your boot2docker vm
+```
+boot2docker restart
+```
+
+

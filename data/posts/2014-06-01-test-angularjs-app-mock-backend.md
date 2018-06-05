@@ -1,0 +1,105 @@
+---
+path: "/test-angularjs-app-mock-backend"
+date: "2014-06-01"
+title: "Angular e2e tests, Mock your backend"
+---
+The aim of this article is to show you, how I mock my API when I test my angularjs applications.
+
+## Why mock your API call?
+
+* Testing client can be done in separation of the server
+* Because third-party API which is non usable in test
+* I won't test things twice (server and client)
+
+## How to mock your API
+
+First you will need to add [angular-mock](https://github.com/angular/bower-angular-mocks) script to your application.
+
+
+```shell
+# Installation (via bower)
+bower install angular-mocks 
+
+# And include this script in your angularjs app
+<script type="text/javascript" src="bower_components/angular-mocks/angular-mocks.js"></script>
+```
+You can now start to mock you http request.
+
+### The hard way
+
+You can mock backend with protractor using the `browser.addMockModule()` method.
+
+
+A test example :
+```javascript
+describe('A test', function() {
+		it('should diplay raoul in result' ,function() {
+			browser.addMockModule('httpBackendMock',
+            function() {
+				angular.module('httpBackendMock',
+               ['mainApp', 'ngMockE2E'])
+			    .run(function($httpBackend) {
+			        $httpBackend.whenGET('/results').respond('raoul');    
+			    });
+			}); 
+
+			browser.get('/');
+			var result = element(by.binding('result'));
+			expect(result.getText()).toEqual('raoul');
+		});
+})
+
+```
+
+Inconveniences:
+
+* Verbose
+* Your fixtures can be injected only once in a scenario.
+
+### The easy way
+
+I developped a tiny nodejs module to make your http mock easier : [HttpBackend](https://github.com/nchaulet/httpbackend).
+
+So now install the httpbackend module `npm install httpbackend`
+
+And then test :
+```javascript
+var HttpBackend = require('httpbackend');
+var backend;
+
+describe('Test Http backend methods', function() {
+	beforeEach(function() {
+    	backend = new HttpBackend(browser);
+    });
+    
+	afterEach(function() {
+		backend.clear();
+	});
+
+	it('Test whenGET with string response', function() {
+		backend.whenGET(/result/).respond('raoul');
+
+		browser.get('/');
+
+		var result = element(by.binding('result'));
+		expect(result.getText()).toEqual('raoul');
+  	});
+});
+```
+
+Avantages:
+
+* Syntax 
+* You can redefine fixtures during a scenario.
+
+
+## Resources
+
+https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend
+https://github.com/nchaulet/httpbackend
+
+
+
+
+
+

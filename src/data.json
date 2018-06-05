@@ -1,0 +1,1341 @@
+{
+  "db": [
+    {
+      "meta": {
+        "exported_on": 1527716866567,
+        "version": "004"
+      },
+      "data": {
+        "posts": [
+          {
+            "id": 2,
+            "uuid": "396e92c7-eebb-4307-adc3-7644700e9f66",
+            "title": "Hello World",
+            "slug": "hello-world",
+            "markdown": "Hello World",
+            "html": "<p>Hello World</p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1401440715491,
+            "created_by": 1,
+            "updated_at": 1401440724785,
+            "updated_by": 1,
+            "published_at": 1400576700000,
+            "published_by": 1
+          },
+          {
+            "id": 3,
+            "uuid": "e6cd1d72-7da2-4be3-b33c-0903e3d85ad7",
+            "title": "Angular e2e tests, Mock your backend",
+            "slug": "test-angularjs-app-mock-backend",
+            "markdown": "The aim of this article is to show you, how I mock my API when I test my angularjs applications.\n\n## Why mock your API call?\n\n* Testing client can be done in separation of the server\n* Because third-party API which is non usable in test\n* I won't test things twice (server and client)\n\n## How to mock your API\n\nFirst you will need to add [angular-mock](https://github.com/angular/bower-angular-mocks) script to your application.\n\n\n```shell\n# Installation (via bower)\nbower install angular-mocks \n\n# And include this script in your angularjs app\n<script type=\"text/javascript\" src=\"bower_components/angular-mocks/angular-mocks.js\"></script>\n```\nYou can now start to mock you http request.\n\n### The hard way\n\nYou can mock backend with protractor using the `browser.addMockModule()` method.\n\n\nA test example :\n```javascript\ndescribe('A test', function() {\n\t\tit('should diplay raoul in result' ,function() {\n\t\t\tbrowser.addMockModule('httpBackendMock',\n            function() {\n\t\t\t\tangular.module('httpBackendMock',\n               ['mainApp', 'ngMockE2E'])\n\t\t\t    .run(function($httpBackend) {\n\t\t\t        $httpBackend.whenGET('/results').respond('raoul');    \n\t\t\t    });\n\t\t\t}); \n\n\t\t\tbrowser.get('/');\n\t\t\tvar result = element(by.binding('result'));\n\t\t\texpect(result.getText()).toEqual('raoul');\n\t\t});\n})\n\n```\n\nInconveniences:\n\n* Verbose\n* Your fixtures can be injected only once in a scenario.\n\n### The easy way\n\nI developped a tiny nodejs module to make your http mock easier : [HttpBackend](https://github.com/nchaulet/httpbackend).\n\nSo now install the httpbackend module `npm install httpbackend`\n\nAnd then test :\n```javascript\nvar HttpBackend = require('httpbackend');\nvar backend;\n\ndescribe('Test Http backend methods', function() {\n\tbeforeEach(function() {\n    \tbackend = new HttpBackend(browser);\n    });\n    \n\tafterEach(function() {\n\t\tbackend.clear();\n\t});\n\n\tit('Test whenGET with string response', function() {\n\t\tbackend.whenGET(/result/).respond('raoul');\n\n\t\tbrowser.get('/');\n\n\t\tvar result = element(by.binding('result'));\n\t\texpect(result.getText()).toEqual('raoul');\n  \t});\n});\n```\n\nAvantages:\n\n* Syntax \n* You can redefine fixtures during a scenario.\n\n\n## Resources\n\nhttps://docs.angularjs.org/api/ngMockE2E/service/$httpBackend\nhttps://github.com/nchaulet/httpbackend\n\n\n\n\n\n",
+            "html": "<p>The aim of this article is to show you, how I mock my API when I test my angularjs applications.</p>\n\n<h2 id=\"whymockyourapicall\">Why mock your API call?</h2>\n\n<ul>\n<li>Testing client can be done in separation of the server</li>\n<li>Because third-party API which is non usable in test</li>\n<li>I won't test things twice (server and client)</li>\n</ul>\n\n<h2 id=\"howtomockyourapi\">How to mock your API</h2>\n\n<p>First you will need to add <a href=\"https://github.com/angular/bower-angular-mocks\">angular-mock</a> script to your application.</p>\n\n<pre><code class=\"shell\"># Installation (via bower)\nbower install angular-mocks \n\n# And include this script in your angularjs app\n&lt;script type=\"text/javascript\" src=\"bower_components/angular-mocks/angular-mocks.js\"&gt;&lt;/script&gt;  \n</code></pre>\n\n<p>You can now start to mock you http request.</p>\n\n<h3 id=\"thehardway\">The hard way</h3>\n\n<p>You can mock backend with protractor using the <code>browser.addMockModule()</code> method.</p>\n\n<p>A test example :  </p>\n\n<pre><code class=\"javascript\">describe('A test', function() {  \n        it('should diplay raoul in result' ,function() {\n            browser.addMockModule('httpBackendMock',\n            function() {\n                angular.module('httpBackendMock',\n               ['mainApp', 'ngMockE2E'])\n                .run(function($httpBackend) {\n                    $httpBackend.whenGET('/results').respond('raoul');    \n                });\n            }); \n\n            browser.get('/');\n            var result = element(by.binding('result'));\n            expect(result.getText()).toEqual('raoul');\n        });\n})\n</code></pre>\n\n<p>Inconveniences:</p>\n\n<ul>\n<li>Verbose</li>\n<li>Your fixtures can be injected only once in a scenario.</li>\n</ul>\n\n<h3 id=\"theeasyway\">The easy way</h3>\n\n<p>I developped a tiny nodejs module to make your http mock easier : <a href=\"https://github.com/nchaulet/httpbackend\">HttpBackend</a>.</p>\n\n<p>So now install the httpbackend module <code>npm install httpbackend</code></p>\n\n<p>And then test :  </p>\n\n<pre><code class=\"javascript\">var HttpBackend = require('httpbackend');  \nvar backend;\n\ndescribe('Test Http backend methods', function() {  \n    beforeEach(function() {\n        backend = new HttpBackend(browser);\n    });\n\n    afterEach(function() {\n        backend.clear();\n    });\n\n    it('Test whenGET with string response', function() {\n        backend.whenGET(/result/).respond('raoul');\n\n        browser.get('/');\n\n        var result = element(by.binding('result'));\n        expect(result.getText()).toEqual('raoul');\n      });\n});\n</code></pre>\n\n<p>Avantages:</p>\n\n<ul>\n<li>Syntax </li>\n<li>You can redefine fixtures during a scenario.</li>\n</ul>\n\n<h2 id=\"resources\">Resources</h2>\n\n<p><a href='https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend'>https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend</a> <br />\n<a href='https://github.com/nchaulet/httpbackend'>https://github.com/nchaulet/httpbackend</a></p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1401441694700,
+            "created_by": 1,
+            "updated_at": 1402678865475,
+            "updated_by": 1,
+            "published_at": 1401642756161,
+            "published_by": 1
+          },
+          {
+            "id": 4,
+            "uuid": "45064f3a-dd1e-42e2-a25a-b3d9afbcede3",
+            "title": "Geocoding in node.js with node-geocoder",
+            "slug": "geocoding-with-node-geocoder",
+            "markdown": "After more than a year of developing `node-geocoder` library, I finally take the time to write a small article to present you this library.\n\nNode geocoder is a node.js module which provides an abstraction layer for geocoding and reverse geocoding.\n\n## Usage\n\nTo install the module it's really easy : just run the following command to get the latest version:\n```shell\nnpm install node-geocoder\n```\nThen you can geocode your first address :\n```javascript\n// Require the module\nvar NodeGeocoder = require('node-geocoder');\n// Choose a geocoder provider\nvar geocoder = NodeGeocoder.get('google');\n\n// Geocode\ngeocoder.geocode('Your adress')\n\t.then(function(result) {\n    \tconsole.log(result);\n    });\n```\n\n## Future of node-geocoder\n\n\n* More provider: Currently this library supports 11 geocoding providers. In a near future new providers will appear.\n* Better error handling: I am currently refactoring error handling to be more debugable.\n* A logo ?\n\n## More\n\nNode-geocoder documentation http://nchaulet.github.io/node-geocoder/\n\nGithub: https://github.com/nchaulet/node-geocoder\n\n\n\n\n",
+            "html": "<p>After more than a year of developing <code>node-geocoder</code> library, I finally take the time to write a small article to present you this library.</p>\n\n<p>Node geocoder is a node.js module which provides an abstraction layer for geocoding and reverse geocoding.</p>\n\n<h2 id=\"usage\">Usage</h2>\n\n<p>To install the module it's really easy : just run the following command to get the latest version:  </p>\n\n<pre><code class=\"shell\">npm install node-geocoder  \n</code></pre>\n\n<p>Then you can geocode your first address :  </p>\n\n<pre><code class=\"javascript\">// Require the module\nvar NodeGeocoder = require('node-geocoder');  \n// Choose a geocoder provider\nvar geocoder = NodeGeocoder.get('google');\n\n// Geocode\ngeocoder.geocode('Your adress')  \n    .then(function(result) {\n        console.log(result);\n    });\n</code></pre>\n\n<h2 id=\"futureofnodegeocoder\">Future of node-geocoder</h2>\n\n<ul>\n<li>More provider: Currently this library supports 11 geocoding providers. In a near future new providers will appear.</li>\n<li>Better error handling: I am currently refactoring error handling to be more debugable.</li>\n<li>A logo ?</li>\n</ul>\n\n<h2 id=\"more\">More</h2>\n\n<p>Node-geocoder documentation <a href='http://nchaulet.github.io/node-geocoder/'>http://nchaulet.github.io/node-geocoder/</a></p>\n\n<p>Github: <a href='https://github.com/nchaulet/node-geocoder'>https://github.com/nchaulet/node-geocoder</a></p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1402941778768,
+            "created_by": 1,
+            "updated_at": 1422262097203,
+            "updated_by": 1,
+            "published_at": 1422259200000,
+            "published_by": 1
+          },
+          {
+            "id": 5,
+            "uuid": "cf9af68f-b0b3-4047-ac5f-a377223b8144",
+            "title": "Publish node package on NPM best practices",
+            "slug": "publish-package-on-npm-best-practice",
+            "markdown": "As a contributor of some packages on npm, I will try my best to give you some tips on how to publish package on npm.\n\n## NPM ?\n\nNode package manager is the official package manager for nodejs.\n[npm doc](https://www.npmjs.org/doc/)\n\n## Semver\n\nYou must use [Semver](http://semver.org/) versioning for your package.\n\nIf you use Grunt or Gulp, you can use a plugin to release a major or minor version, and automate your release process ([grunt-bump](https://github.com/vojtajina/grunt-bump), [gulp-bump](https://github.com/stevelacy/gulp-bump))\n\n## devDependencies\n\nUse `devDependencies` key in your `package.json` to define dependencies needed in your build or test process. \n\nInstall package as dev dependencies : \n```shell\nnpm install <package-name> --save-dev\n```\n\nYou must put your test framework, grunt|gulp plugins, jshint, in `devDependencies`.\n\n## .npmignore\n\nYou can use a `.npmignore` file at the root of your project to keep your files and directories out of your package. For example, tests and demo directories can be excluded.\n\n`.npmignore` example file \n\n```\ntest\n.jshintrc\n.travis.yml\n```\n\n## Test your module\n\nBefore publishing your node package, it's really interesting to test it installed, globally or in another project.\n\nGlobal module, if your package define global module you can install this using.\n```shell\ncd your_module_directory\nnpm install . -g\n# Test\n```\n\nYou can also test your module in another project using this command:\n```shell\ncd test_project\nnpm install you_module-directory\n# Test\n```\n\n\n## Links\n\nnpm documentation : https://www.npmjs.org/doc/\nSemver: http://semver.org/\nGrunt bump: https://github.com/vojtajina/grunt-bump\nGulp bump: https://github.com/stevelacy/gulp-bump\n",
+            "html": "<p>As a contributor of some packages on npm, I will try my best to give you some tips on how to publish package on npm.</p>\n\n<h2 id=\"npm\">NPM ?</h2>\n\n<p>Node package manager is the official package manager for nodejs. <br />\n<a href=\"https://www.npmjs.org/doc/\">npm doc</a></p>\n\n<h2 id=\"semver\">Semver</h2>\n\n<p>You must use <a href=\"http://semver.org/\">Semver</a> versioning for your package.</p>\n\n<p>If you use Grunt or Gulp, you can use a plugin to release a major or minor version, and automate your release process (<a href=\"https://github.com/vojtajina/grunt-bump\">grunt-bump</a>, <a href=\"https://github.com/stevelacy/gulp-bump\">gulp-bump</a>)</p>\n\n<h2 id=\"devdependencies\">devDependencies</h2>\n\n<p>Use <code>devDependencies</code> key in your <code>package.json</code> to define dependencies needed in your build or test process. </p>\n\n<p>Install package as dev dependencies :  </p>\n\n<pre><code class=\"shell\">npm install &lt;package-name&gt; --save-dev  \n</code></pre>\n\n<p>You must put your test framework, grunt|gulp plugins, jshint, in <code>devDependencies</code>.</p>\n\n<h2 id=\"npmignore\">.npmignore</h2>\n\n<p>You can use a <code>.npmignore</code> file at the root of your project to keep your files and directories out of your package. For example, tests and demo directories can be excluded.</p>\n\n<p><code>.npmignore</code> example file </p>\n\n<pre><code>test  \n.jshintrc\n.travis.yml\n</code></pre>\n\n<h2 id=\"testyourmodule\">Test your module</h2>\n\n<p>Before publishing your node package, it's really interesting to test it installed, globally or in another project.</p>\n\n<p>Global module, if your package define global module you can install this using.  </p>\n\n<pre><code class=\"shell\">cd your_module_directory  \nnpm install . -g  \n# Test\n</code></pre>\n\n<p>You can also test your module in another project using this command:  </p>\n\n<pre><code class=\"shell\">cd test_project  \nnpm install you_module-directory  \n# Test\n</code></pre>\n\n<h2 id=\"links\">Links</h2>\n\n<p>npm documentation : <a href='https://www.npmjs.org/doc/'>https://www.npmjs.org/doc/</a> <br />\nSemver: <a href='http://semver.org/'>http://semver.org/</a> <br />\nGrunt bump: <a href='https://github.com/vojtajina/grunt-bump'>https://github.com/vojtajina/grunt-bump</a> <br />\nGulp bump: <a href='https://github.com/stevelacy/gulp-bump'>https://github.com/stevelacy/gulp-bump</a></p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1409126554918,
+            "created_by": 1,
+            "updated_at": 1410247223040,
+            "updated_by": 1,
+            "published_at": 1409508411108,
+            "published_by": 1
+          },
+          {
+            "id": 6,
+            "uuid": "97d33f0b-8f22-4f14-8e92-0c2c3b79b6c5",
+            "title": "Moving to Montreal",
+            "slug": "crawl-a-webpage",
+            "markdown": "??",
+            "html": "<p>??</p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "draft",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1416566676436,
+            "created_by": 1,
+            "updated_at": 1439829261679,
+            "updated_by": 1,
+            "published_at": null,
+            "published_by": null
+          },
+          {
+            "id": 9,
+            "uuid": "10aedf7f-52d2-419b-b821-9ed9e8428a8e",
+            "title": "Boot2docker with NFS on OSX",
+            "slug": "boot2docker-nfs-on-mac",
+            "markdown": "![](/content/images/2015/04/homepage-docker-logo-1.png)\nBoot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is `vboxfs`, which can be an issue.\n\n\n`Vboxfs` is really slow and you may encounter access and performance issues.\n\nA good solution is to use `nfs` to share your folders.\n\n## How to share your folders\n\nOn OSX, run the following comands:\n\n``` shell\nsudo echo \"/Users -mapall=`whoami`:staff `boot2docker ip`\" | sudo tee -a /etc/exports\n```\n\n``` shell\nsudo nfsd restart\n```\n\n## To mount a folder on boot2docker VM\n\nConnect yourself to your boot2docker vm using ssh\n```shell\nboot2docker ssh\n```\n\nThen run the following:\n\n``` shell\nsudo su\necho \"#! /bin/sh\nsleep 1\nsudo umount /Users\nsudo /usr/local/etc/init.d/nfs-client start\nsudo mount 192.168.59.3:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp\" > /var/lib/boot2docker/bootlocal.sh\nsudo chmod a+x /var/lib/boot2docker/bootlocal.sh\nexit\nexit\n```\n\nNow that the above is done, restart your boot2docker vm\n```\nboot2docker restart\n```\n\n",
+            "html": "<p><img src=\"/content/images/2015/04/homepage-docker-logo-1.png\" alt=\"\" />\nBoot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is <code>vboxfs</code>, which can be an issue.</p>\n\n<p><code>Vboxfs</code> is really slow and you may encounter access and performance issues.</p>\n\n<p>A good solution is to use <code>nfs</code> to share your folders.</p>\n\n<h2 id=\"howtoshareyourfolders\">How to share your folders</h2>\n\n<p>On OSX, run the following comands:</p>\n\n<pre><code class=\"language- shell\">sudo echo \"/Users -mapall=`whoami`:staff `boot2docker ip`\" | sudo tee -a /etc/exports  \n</code></pre>\n\n<pre><code class=\"language- shell\">sudo nfsd restart  \n</code></pre>\n\n<h2 id=\"tomountafolderonboot2dockervm\">To mount a folder on boot2docker VM</h2>\n\n<p>Connect yourself to your boot2docker vm using ssh  </p>\n\n<pre><code class=\"language-shell\">boot2docker ssh  \n</code></pre>\n\n<p>Then run the following:</p>\n\n<pre><code class=\"language- shell\">sudo su  \necho \"#! /bin/sh  \nsleep 1  \nsudo umount /Users  \nsudo /usr/local/etc/init.d/nfs-client start  \nsudo mount 192.168.59.3:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp\" &gt; /var/lib/boot2docker/bootlocal.sh  \nsudo chmod a+x /var/lib/boot2docker/bootlocal.sh  \nexit  \nexit  \n</code></pre>\n\n<p>Now that the above is done, restart your boot2docker vm  </p>\n\n<pre><code>boot2docker restart  \n</code></pre>",
+            "image": "/content/images/2015/04/homepage-docker-logo-2.png",
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1430133756741,
+            "created_by": 1,
+            "updated_at": 1436537559934,
+            "updated_by": 1,
+            "published_at": 1430134994409,
+            "published_by": 1
+          },
+          {
+            "id": 11,
+            "uuid": "652a1a0d-74ae-4c5a-be25-61921623bfaf",
+            "title": "ReactEurope 2015: Notes",
+            "slug": "reacteurope-2015-my-notes",
+            "markdown": "![](/content/images/2015/07/reacteurope-1.png)\n\nLast week I was lucky enough to attend the ReactEurope Event in Paris, and it was a really interesting experience. Speakers and talks were amazing, and the organization of the event was perfect.\n\nHere are some notes I take during the event(Raw):\n\n**Inline Style:** Inline style seems to be a good practice for state related style. And javascript style library like [Radium](https://github.com/FormidableLabs/radium) are really useful for inline style.\n\n**GraphQL:** GraphQL seems to be a really good solution to serve data to multiple clients, and allow you to limit the number of request and data to fetch for mobile devices. It’s a promising new approach to retrieve Data, and it could be plugged over your existing datastore (API REST, ...). A [Specification Draft](https://github.com/facebook/graphql) of graphQL and an implementation of a [graphQL Server](https://github.com/graphql/graphql-js) were released during the event.\n\n**Relay**: the glue between graphQL server and your's React Application should be released in august 2015.\n\n**Animation:** RIP ReactCSSTransitionGroup, the future of animation in react and react-native should bee less painfull.\n\n**Redux and hot reload**: [Redux flux implemenation](https://github.com/gaearon/redux), with store as reductor function, seems to be the Flux library to use in 2015. Hot reload improve really the developper experience and the future redux dev tools with state history navigation demo was amazing and should be released soon.\n\n\nWith a huge comunity, a great developper experience, reactJS and flux is really a great solution to build amazing UI. Add to this react-native for mobile development, and react should be the library to use in 2015.\n\n",
+            "html": "<p><img src=\"/content/images/2015/07/reacteurope-1.png\" alt=\"\" /></p>\n\n<p>Last week I was lucky enough to attend the ReactEurope Event in Paris, and it was a really interesting experience. Speakers and talks were amazing, and the organization of the event was perfect.</p>\n\n<p>Here are some notes I take during the event(Raw):</p>\n\n<p><strong>Inline Style:</strong> Inline style seems to be a good practice for state related style. And javascript style library like <a href=\"https://github.com/FormidableLabs/radium\">Radium</a> are really useful for inline style.</p>\n\n<p><strong>GraphQL:</strong> GraphQL seems to be a really good solution to serve data to multiple clients, and allow you to limit the number of request and data to fetch for mobile devices. It’s a promising new approach to retrieve Data, and it could be plugged over your existing datastore (API REST, ...). A <a href=\"https://github.com/facebook/graphql\">Specification Draft</a> of graphQL and an implementation of a <a href=\"https://github.com/graphql/graphql-js\">graphQL Server</a> were released during the event.</p>\n\n<p><strong>Relay</strong>: the glue between graphQL server and your's React Application should be released in august 2015.</p>\n\n<p><strong>Animation:</strong> RIP ReactCSSTransitionGroup, the future of animation in react and react-native should bee less painfull.</p>\n\n<p><strong>Redux and hot reload</strong>: <a href=\"https://github.com/gaearon/redux\">Redux flux implemenation</a>, with store as reductor function, seems to be the Flux library to use in 2015. Hot reload improve really the developper experience and the future redux dev tools with state history navigation demo was amazing and should be released soon.</p>\n\n<p>With a huge comunity, a great developper experience, reactJS and flux is really a great solution to build amazing UI. Add to this react-native for mobile development, and react should be the library to use in 2015.</p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1436193407320,
+            "created_by": 1,
+            "updated_at": 1436206882054,
+            "updated_by": 1,
+            "published_at": 1436196735956,
+            "published_by": 1
+          },
+          {
+            "id": 12,
+            "uuid": "c91c7e23-1e53-4918-a52b-44a7aa89816a",
+            "title": "MAPADO WIDGET",
+            "slug": "mapado-widget-demo",
+            "markdown": "<div style=\"margin:0 -200px;\">\n<blockquote class=\"mapado-activity\"  data-settings-max_columns=\"2\" data-settings-limit=\"10\" data-settings-thumb_size=\"s\" data-settings-thumb_position=\"right\"><a href=\"http://www.mapado.com/lyon\"> Lyon </a></blockquote> <script src=\"//www.mapado.com/js/widget.js/widget.js\"></script>\n</div>",
+            "html": "<div style=\"margin:0 -200px;\">  \n<blockquote class=\"mapado-activity\"  data-settings-max_columns=\"2\" data-settings-limit=\"10\" data-settings-thumb_size=\"s\" data-settings-thumb_position=\"right\"><a href=\"http://www.mapado.com/lyon\"> Lyon </a></blockquote> <script src=\"//www.mapado.com/js/widget.js/widget.js\"></script>  \n</div>",
+            "image": null,
+            "featured": 0,
+            "page": 1,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1441351799405,
+            "created_by": 1,
+            "updated_at": 1441351879375,
+            "updated_by": 1,
+            "published_at": 1441351818271,
+            "published_by": 1
+          },
+          {
+            "id": 14,
+            "uuid": "8519c33a-e1aa-4036-a3fc-d0cb4b41b55c",
+            "title": "January reading list",
+            "slug": "testing-expressjs-middleware",
+            "markdown": "January is New Year’s Resolutions time, and one of my resolution is to write more blog post. I am starting a monthly article collection to share a curated list of posts, or talk that I found really interesting.\n\n[Graphql at shopify](https://www.youtube.com/watch?v=Wlu_PWCjc6Y&app=desktop) Really good talk about implementing Graphql in ruby.\n\n[Docker Hook for precommit](https://engineeringblog.yelp.com/2017/01/announcing-docker-hook-support-for-pre-commit.html)\n\n ",
+            "html": "<p>January is New Year’s Resolutions time, and one of my resolution is to write more blog post. I am starting a monthly article collection to share a curated list of posts, or talk that I found really interesting.</p>\n\n<p><a href=\"https://www.youtube.com/watch?v=Wlu_PWCjc6Y&amp;app=desktop\">Graphql at shopify</a> Really good talk about implementing Graphql in ruby.</p>\n\n<p><a href=\"https://engineeringblog.yelp.com/2017/01/announcing-docker-hook-support-for-pre-commit.html\">Docker Hook for precommit</a></p>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "draft",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1441806411543,
+            "created_by": 1,
+            "updated_at": 1485917518574,
+            "updated_by": 1,
+            "published_at": null,
+            "published_by": null
+          },
+          {
+            "id": 15,
+            "uuid": "52b5c0c9-8cb9-4767-b480-e76f99d624fb",
+            "title": "Cache npm install on docker",
+            "slug": "cache-npm-install-on-docker",
+            "markdown": "\nDocker had a great cache mechanism, and you can easily use it to improve your image build time.\n\n![](/content/images/2015/09/docker-node.jpeg)\n\n## Node Application Dockerfile\n\nYou can use the below Dockerfile to run a simple nodejs application, but for every image build the command `npm install` will be executed.\n\n```Dockerfile\nFROM node\n\nADD . /code\nWORKDIR /code\n\nRUN npm install\n\nCMD npm start\n```\n\n## Use docker layer cache\n\nA great optimization to the previous Dockerfile is to run `npm install` before adding your codebase. For this you will have to add `package.json` and to run `nmp install`, before you add your codebase.\n\n```Dockerfile\nFROM node\n\nADD ./package.json /code/package.json\nWORKDIR /code\nRUN npm install\n\nADD . /code\n\nCMD npm start\n```\n\n### Conclusion\n\nNow your `npm install` are cached and will be rerunned only if your `package.json` changes, making your image build time faster.\n",
+            "html": "<p>Docker had a great cache mechanism, and you can easily use it to improve your image build time.</p>\n\n<p><img src=\"/content/images/2015/09/docker-node.jpeg\" alt=\"\" /></p>\n\n<h2 id=\"nodeapplicationdockerfile\">Node Application Dockerfile</h2>\n\n<p>You can use the below Dockerfile to run a simple nodejs application, but for every image build the command <code>npm install</code> will be executed.</p>\n\n<pre><code class=\"language-Dockerfile\">FROM node\n\nADD . /code  \nWORKDIR /code\n\nRUN npm install\n\nCMD npm start  \n</code></pre>\n\n<h2 id=\"usedockerlayercache\">Use docker layer cache</h2>\n\n<p>A great optimization to the previous Dockerfile is to run <code>npm install</code> before adding your codebase. For this you will have to add <code>package.json</code> and to run <code>nmp install</code>, before you add your codebase.</p>\n\n<pre><code class=\"language-Dockerfile\">FROM node\n\nADD ./package.json /code/package.json  \nWORKDIR /code  \nRUN npm install\n\nADD . /code\n\nCMD npm start  \n</code></pre>\n\n<h3 id=\"conclusion\">Conclusion</h3>\n\n<p>Now your <code>npm install</code> are cached and will be rerunned only if your <code>package.json</code> changes, making your image build time faster.</p>",
+            "image": "/content/images/2015/09/docker-node-1.jpeg",
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1442065144353,
+            "created_by": 1,
+            "updated_at": 1442159848161,
+            "updated_by": 1,
+            "published_at": 1442159688570,
+            "published_by": 1
+          },
+          {
+            "id": 16,
+            "uuid": "08340100-b7fe-4e9b-9d4e-3db7fa797187",
+            "title": "NPM tips",
+            "slug": "npm-tips-2016",
+            "markdown": "\n![NPM](/content/images/2016/03/npm.png)\n### Save package exact version\n\nBecause a lot of node package are not using semver, it is a good practice to save package exact version.\n\n```\nnpm install --save --save-exact\n```\nor set the option globally\n```\nnpm config set save-exact=true\n```\n\n### Do not use npm start for production\n\nIf you application intercept unix signals (SIGINT, SIGTERM) for clean exit do not use npm start to launch your app.\n\n### NPM shortcut\n\n* use `npm i` instead of `npm install`\n* use `npm i -S` instead of `npm install --save`\n* use `npm i -D` instead of `npm install --save-dev`\n* use `npm r` instead of `npm uninstall`",
+            "html": "<p><img src=\"/content/images/2016/03/npm.png\" alt=\"NPM\" /></p>\n\n<h3 id=\"savepackageexactversion\">Save package exact version</h3>\n\n<p>Because a lot of node package are not using semver, it is a good practice to save package exact version.</p>\n\n<pre><code>npm install --save --save-exact  \n</code></pre>\n\n<p>or set the option globally  </p>\n\n<pre><code>npm config set save-exact=true  \n</code></pre>\n\n<h3 id=\"donotusenpmstartforproduction\">Do not use npm start for production</h3>\n\n<p>If you application intercept unix signals (SIGINT, SIGTERM) for clean exit do not use npm start to launch your app.</p>\n\n<h3 id=\"npmshortcut\">NPM shortcut</h3>\n\n<ul>\n<li>use <code>npm i</code> instead of <code>npm install</code></li>\n<li>use <code>npm i -S</code> instead of <code>npm install --save</code></li>\n<li>use <code>npm i -D</code> instead of <code>npm install --save-dev</code></li>\n<li>use <code>npm r</code> instead of <code>npm uninstall</code></li>\n</ul>",
+            "image": null,
+            "featured": 0,
+            "page": 0,
+            "status": "published",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "author_id": 1,
+            "created_at": 1451246169752,
+            "created_by": 1,
+            "updated_at": 1458443221478,
+            "updated_by": 1,
+            "published_at": 1458443221482,
+            "published_by": 1
+          }
+        ],
+        "users": [
+          {
+            "id": 1,
+            "uuid": "3cdcf00d-fe84-4ab9-98ac-ff2e9ea3a468",
+            "name": "Nicolas Chaulet",
+            "slug": "nicolas-chaulet",
+            "password": "$2a$10$R/a.63V.Jisn64uF3hIfw.8hJlr1oAFAHPNcxwpFt3py1m6./n08G",
+            "email": "n.chaulet@gmail.com",
+            "image": "//www.gravatar.com/avatar/6ecd4df885e55b00bdd23bd53678aec8?d=404",
+            "cover": null,
+            "bio": null,
+            "website": null,
+            "location": null,
+            "accessibility": null,
+            "status": "active",
+            "language": "en_US",
+            "meta_title": null,
+            "meta_description": null,
+            "last_login": 1527716059060,
+            "created_at": 1401440677153,
+            "created_by": 1,
+            "updated_at": 1527716059061,
+            "updated_by": 1,
+            "tour": null
+          }
+        ],
+        "roles": [
+          {
+            "id": 1,
+            "uuid": "3aeac894-6ab3-49fb-91aa-aee6577d4765",
+            "name": "Administrator",
+            "description": "Administrators",
+            "created_at": 1401440654628,
+            "created_by": 1,
+            "updated_at": 1401440654628,
+            "updated_by": 1
+          },
+          {
+            "id": 2,
+            "uuid": "37c748c9-fc1f-4363-a831-2e8154b89369",
+            "name": "Editor",
+            "description": "Editors",
+            "created_at": 1401440654653,
+            "created_by": 1,
+            "updated_at": 1401440654653,
+            "updated_by": 1
+          },
+          {
+            "id": 3,
+            "uuid": "7b659104-64b9-4ee5-a565-2d9abe2a483d",
+            "name": "Author",
+            "description": "Authors",
+            "created_at": 1401440654681,
+            "created_by": 1,
+            "updated_at": 1401440654681,
+            "updated_by": 1
+          },
+          {
+            "id": 4,
+            "uuid": "0fd4e6c5-7237-42e5-a152-c6f6305185ca",
+            "name": "Owner",
+            "description": "Blog Owner",
+            "created_at": 1410085626708,
+            "created_by": 1,
+            "updated_at": 1410085626708,
+            "updated_by": 1
+          }
+        ],
+        "roles_users": [
+          {
+            "id": 1,
+            "role_id": 4,
+            "user_id": 1
+          }
+        ],
+        "permissions": [
+          {
+            "id": 4,
+            "uuid": "9bd64179-c2cc-4c3e-a30e-bf7ac4ad0246",
+            "name": "Export database",
+            "object_type": "db",
+            "action_type": "exportContent",
+            "object_id": null,
+            "created_at": 1410085626715,
+            "created_by": 1,
+            "updated_at": 1410085626715,
+            "updated_by": 1
+          },
+          {
+            "id": 5,
+            "uuid": "33cd98e3-ffab-45d4-8847-d0968bacff86",
+            "name": "Import database",
+            "object_type": "db",
+            "action_type": "importContent",
+            "object_id": null,
+            "created_at": 1410085626793,
+            "created_by": 1,
+            "updated_at": 1410085626793,
+            "updated_by": 1
+          },
+          {
+            "id": 6,
+            "uuid": "f9eaa268-5eee-47b3-a644-f2b077ae3141",
+            "name": "Delete all content",
+            "object_type": "db",
+            "action_type": "deleteAllContent",
+            "object_id": null,
+            "created_at": 1410085626882,
+            "created_by": 1,
+            "updated_at": 1410085626882,
+            "updated_by": 1
+          },
+          {
+            "id": 7,
+            "uuid": "0a42a345-61db-4b9f-aeed-3a696e597bf4",
+            "name": "Send mail",
+            "object_type": "mail",
+            "action_type": "send",
+            "object_id": null,
+            "created_at": 1410085626966,
+            "created_by": 1,
+            "updated_at": 1410085626966,
+            "updated_by": 1
+          },
+          {
+            "id": 8,
+            "uuid": "d6e1bcc9-d4c5-4892-ae44-3eeca94791ee",
+            "name": "Browse notifications",
+            "object_type": "notification",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085626990,
+            "created_by": 1,
+            "updated_at": 1410085626990,
+            "updated_by": 1
+          },
+          {
+            "id": 9,
+            "uuid": "145dc341-0c6c-4e34-9b44-fed4f040f026",
+            "name": "Add notifications",
+            "object_type": "notification",
+            "action_type": "add",
+            "object_id": null,
+            "created_at": 1410085627016,
+            "created_by": 1,
+            "updated_at": 1410085627016,
+            "updated_by": 1
+          },
+          {
+            "id": 10,
+            "uuid": "fa949c86-7362-4baf-88d2-abcc3cbefde7",
+            "name": "Delete notifications",
+            "object_type": "notification",
+            "action_type": "destroy",
+            "object_id": null,
+            "created_at": 1410085627043,
+            "created_by": 1,
+            "updated_at": 1410085627043,
+            "updated_by": 1
+          },
+          {
+            "id": 11,
+            "uuid": "698a8217-1d63-486e-809d-dca146b8bae6",
+            "name": "Browse posts",
+            "object_type": "post",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085627068,
+            "created_by": 1,
+            "updated_at": 1410085627068,
+            "updated_by": 1
+          },
+          {
+            "id": 12,
+            "uuid": "0ba82482-3d60-458a-9939-93fa346ee3ff",
+            "name": "Read posts",
+            "object_type": "post",
+            "action_type": "read",
+            "object_id": null,
+            "created_at": 1410085627094,
+            "created_by": 1,
+            "updated_at": 1410085627094,
+            "updated_by": 1
+          },
+          {
+            "id": 13,
+            "uuid": "9712c933-a550-4e12-98c7-b805319953cc",
+            "name": "Edit posts",
+            "object_type": "post",
+            "action_type": "edit",
+            "object_id": null,
+            "created_at": 1410085627128,
+            "created_by": 1,
+            "updated_at": 1410085627128,
+            "updated_by": 1
+          },
+          {
+            "id": 14,
+            "uuid": "0764ed16-8132-4169-bceb-95528e38d4db",
+            "name": "Add posts",
+            "object_type": "post",
+            "action_type": "add",
+            "object_id": null,
+            "created_at": 1410085627156,
+            "created_by": 1,
+            "updated_at": 1410085627156,
+            "updated_by": 1
+          },
+          {
+            "id": 15,
+            "uuid": "95a4548e-c22c-43e9-96fe-643d0bda1b80",
+            "name": "Delete posts",
+            "object_type": "post",
+            "action_type": "destroy",
+            "object_id": null,
+            "created_at": 1410085627186,
+            "created_by": 1,
+            "updated_at": 1410085627186,
+            "updated_by": 1
+          },
+          {
+            "id": 16,
+            "uuid": "720f355c-5242-49d7-8b61-962713b10d4c",
+            "name": "Browse settings",
+            "object_type": "setting",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085627221,
+            "created_by": 1,
+            "updated_at": 1410085627221,
+            "updated_by": 1
+          },
+          {
+            "id": 17,
+            "uuid": "7a65c25d-48a2-4caf-b136-db2e0861e6b6",
+            "name": "Read settings",
+            "object_type": "setting",
+            "action_type": "read",
+            "object_id": null,
+            "created_at": 1410085627250,
+            "created_by": 1,
+            "updated_at": 1410085627250,
+            "updated_by": 1
+          },
+          {
+            "id": 18,
+            "uuid": "cae9b8dd-52f6-43bf-8e95-f283a41ac101",
+            "name": "Edit settings",
+            "object_type": "setting",
+            "action_type": "edit",
+            "object_id": null,
+            "created_at": 1410085627272,
+            "created_by": 1,
+            "updated_at": 1410085627272,
+            "updated_by": 1
+          },
+          {
+            "id": 19,
+            "uuid": "6785ac7c-b20c-4217-ad4a-1588bb141f76",
+            "name": "Generate slugs",
+            "object_type": "slug",
+            "action_type": "generate",
+            "object_id": null,
+            "created_at": 1410085627309,
+            "created_by": 1,
+            "updated_at": 1410085627309,
+            "updated_by": 1
+          },
+          {
+            "id": 20,
+            "uuid": "77ada460-cf23-45a1-89e0-74452d7498fd",
+            "name": "Browse tags",
+            "object_type": "tag",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085627330,
+            "created_by": 1,
+            "updated_at": 1410085627330,
+            "updated_by": 1
+          },
+          {
+            "id": 21,
+            "uuid": "6ae5017b-806b-4895-a10f-8cc8eecd61bb",
+            "name": "Read tags",
+            "object_type": "tag",
+            "action_type": "read",
+            "object_id": null,
+            "created_at": 1410085627351,
+            "created_by": 1,
+            "updated_at": 1410085627351,
+            "updated_by": 1
+          },
+          {
+            "id": 22,
+            "uuid": "21095614-edee-4605-8bf8-4b5e5dfb2f4e",
+            "name": "Edit tags",
+            "object_type": "tag",
+            "action_type": "edit",
+            "object_id": null,
+            "created_at": 1410085627371,
+            "created_by": 1,
+            "updated_at": 1410085627371,
+            "updated_by": 1
+          },
+          {
+            "id": 23,
+            "uuid": "63cee86b-8732-4e92-82dc-4a525afd0a03",
+            "name": "Add tags",
+            "object_type": "tag",
+            "action_type": "add",
+            "object_id": null,
+            "created_at": 1410085627399,
+            "created_by": 1,
+            "updated_at": 1410085627399,
+            "updated_by": 1
+          },
+          {
+            "id": 24,
+            "uuid": "087b670c-742c-4a4d-8874-17cbd590c839",
+            "name": "Delete tags",
+            "object_type": "tag",
+            "action_type": "destroy",
+            "object_id": null,
+            "created_at": 1410085627421,
+            "created_by": 1,
+            "updated_at": 1410085627421,
+            "updated_by": 1
+          },
+          {
+            "id": 25,
+            "uuid": "fa1af90f-f75a-47d9-8dab-a7fd62acbf63",
+            "name": "Browse themes",
+            "object_type": "theme",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085627444,
+            "created_by": 1,
+            "updated_at": 1410085627444,
+            "updated_by": 1
+          },
+          {
+            "id": 26,
+            "uuid": "ffa953e9-5dce-495c-95ad-5565817ab6aa",
+            "name": "Edit themes",
+            "object_type": "theme",
+            "action_type": "edit",
+            "object_id": null,
+            "created_at": 1410085627470,
+            "created_by": 1,
+            "updated_at": 1410085627470,
+            "updated_by": 1
+          },
+          {
+            "id": 27,
+            "uuid": "98b4b7c9-7b5e-42a9-b7dc-56e65ecdb69d",
+            "name": "Browse users",
+            "object_type": "user",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085627505,
+            "created_by": 1,
+            "updated_at": 1410085627505,
+            "updated_by": 1
+          },
+          {
+            "id": 28,
+            "uuid": "32990f4b-3ec0-4286-b2c0-7ef8d2a4ea81",
+            "name": "Read users",
+            "object_type": "user",
+            "action_type": "read",
+            "object_id": null,
+            "created_at": 1410085627530,
+            "created_by": 1,
+            "updated_at": 1410085627530,
+            "updated_by": 1
+          },
+          {
+            "id": 29,
+            "uuid": "98ef134b-cfe5-401d-878f-512407caf59d",
+            "name": "Edit users",
+            "object_type": "user",
+            "action_type": "edit",
+            "object_id": null,
+            "created_at": 1410085627552,
+            "created_by": 1,
+            "updated_at": 1410085627552,
+            "updated_by": 1
+          },
+          {
+            "id": 30,
+            "uuid": "5fdf0d0f-97ae-463a-9090-ac018d1805af",
+            "name": "Add users",
+            "object_type": "user",
+            "action_type": "add",
+            "object_id": null,
+            "created_at": 1410085627574,
+            "created_by": 1,
+            "updated_at": 1410085627574,
+            "updated_by": 1
+          },
+          {
+            "id": 31,
+            "uuid": "dd5043c3-424a-4644-ab78-247e3d6c354b",
+            "name": "Delete users",
+            "object_type": "user",
+            "action_type": "destroy",
+            "object_id": null,
+            "created_at": 1410085627596,
+            "created_by": 1,
+            "updated_at": 1410085627596,
+            "updated_by": 1
+          },
+          {
+            "id": 32,
+            "uuid": "0abf5a2e-8529-4904-b8de-132aebb8f79c",
+            "name": "Assign a role",
+            "object_type": "role",
+            "action_type": "assign",
+            "object_id": null,
+            "created_at": 1410085627617,
+            "created_by": 1,
+            "updated_at": 1410085627617,
+            "updated_by": 1
+          },
+          {
+            "id": 33,
+            "uuid": "0dcaf69c-5fe0-4618-8fa4-60dd98e71b32",
+            "name": "Browse roles",
+            "object_type": "role",
+            "action_type": "browse",
+            "object_id": null,
+            "created_at": 1410085627640,
+            "created_by": 1,
+            "updated_at": 1410085627640,
+            "updated_by": 1
+          }
+        ],
+        "permissions_users": [],
+        "permissions_roles": [
+          {
+            "id": 4,
+            "role_id": 1,
+            "permission_id": 4
+          },
+          {
+            "id": 5,
+            "role_id": 1,
+            "permission_id": 5
+          },
+          {
+            "id": 6,
+            "role_id": 1,
+            "permission_id": 6
+          },
+          {
+            "id": 7,
+            "role_id": 1,
+            "permission_id": 7
+          },
+          {
+            "id": 8,
+            "role_id": 1,
+            "permission_id": 8
+          },
+          {
+            "id": 9,
+            "role_id": 1,
+            "permission_id": 9
+          },
+          {
+            "id": 10,
+            "role_id": 1,
+            "permission_id": 10
+          },
+          {
+            "id": 11,
+            "role_id": 1,
+            "permission_id": 11
+          },
+          {
+            "id": 12,
+            "role_id": 1,
+            "permission_id": 12
+          },
+          {
+            "id": 13,
+            "role_id": 1,
+            "permission_id": 13
+          },
+          {
+            "id": 14,
+            "role_id": 1,
+            "permission_id": 14
+          },
+          {
+            "id": 15,
+            "role_id": 1,
+            "permission_id": 15
+          },
+          {
+            "id": 16,
+            "role_id": 1,
+            "permission_id": 16
+          },
+          {
+            "id": 17,
+            "role_id": 1,
+            "permission_id": 17
+          },
+          {
+            "id": 18,
+            "role_id": 1,
+            "permission_id": 18
+          },
+          {
+            "id": 19,
+            "role_id": 1,
+            "permission_id": 19
+          },
+          {
+            "id": 20,
+            "role_id": 1,
+            "permission_id": 20
+          },
+          {
+            "id": 21,
+            "role_id": 1,
+            "permission_id": 21
+          },
+          {
+            "id": 22,
+            "role_id": 1,
+            "permission_id": 22
+          },
+          {
+            "id": 23,
+            "role_id": 1,
+            "permission_id": 23
+          },
+          {
+            "id": 24,
+            "role_id": 1,
+            "permission_id": 24
+          },
+          {
+            "id": 25,
+            "role_id": 1,
+            "permission_id": 25
+          },
+          {
+            "id": 26,
+            "role_id": 1,
+            "permission_id": 26
+          },
+          {
+            "id": 27,
+            "role_id": 1,
+            "permission_id": 27
+          },
+          {
+            "id": 28,
+            "role_id": 1,
+            "permission_id": 28
+          },
+          {
+            "id": 29,
+            "role_id": 1,
+            "permission_id": 29
+          },
+          {
+            "id": 30,
+            "role_id": 1,
+            "permission_id": 30
+          },
+          {
+            "id": 31,
+            "role_id": 1,
+            "permission_id": 31
+          },
+          {
+            "id": 32,
+            "role_id": 1,
+            "permission_id": 32
+          },
+          {
+            "id": 33,
+            "role_id": 1,
+            "permission_id": 33
+          },
+          {
+            "id": 34,
+            "role_id": 2,
+            "permission_id": 11
+          },
+          {
+            "id": 35,
+            "role_id": 2,
+            "permission_id": 12
+          },
+          {
+            "id": 36,
+            "role_id": 2,
+            "permission_id": 13
+          },
+          {
+            "id": 37,
+            "role_id": 2,
+            "permission_id": 14
+          },
+          {
+            "id": 38,
+            "role_id": 2,
+            "permission_id": 15
+          },
+          {
+            "id": 39,
+            "role_id": 2,
+            "permission_id": 16
+          },
+          {
+            "id": 40,
+            "role_id": 2,
+            "permission_id": 17
+          },
+          {
+            "id": 41,
+            "role_id": 2,
+            "permission_id": 19
+          },
+          {
+            "id": 42,
+            "role_id": 2,
+            "permission_id": 20
+          },
+          {
+            "id": 43,
+            "role_id": 2,
+            "permission_id": 21
+          },
+          {
+            "id": 44,
+            "role_id": 2,
+            "permission_id": 22
+          },
+          {
+            "id": 45,
+            "role_id": 2,
+            "permission_id": 23
+          },
+          {
+            "id": 46,
+            "role_id": 2,
+            "permission_id": 24
+          },
+          {
+            "id": 47,
+            "role_id": 2,
+            "permission_id": 27
+          },
+          {
+            "id": 48,
+            "role_id": 2,
+            "permission_id": 28
+          },
+          {
+            "id": 49,
+            "role_id": 2,
+            "permission_id": 29
+          },
+          {
+            "id": 50,
+            "role_id": 2,
+            "permission_id": 30
+          },
+          {
+            "id": 51,
+            "role_id": 2,
+            "permission_id": 31
+          },
+          {
+            "id": 52,
+            "role_id": 2,
+            "permission_id": 32
+          },
+          {
+            "id": 53,
+            "role_id": 2,
+            "permission_id": 33
+          },
+          {
+            "id": 54,
+            "role_id": 3,
+            "permission_id": 11
+          },
+          {
+            "id": 55,
+            "role_id": 3,
+            "permission_id": 12
+          },
+          {
+            "id": 56,
+            "role_id": 3,
+            "permission_id": 14
+          },
+          {
+            "id": 57,
+            "role_id": 3,
+            "permission_id": 16
+          },
+          {
+            "id": 58,
+            "role_id": 3,
+            "permission_id": 17
+          },
+          {
+            "id": 59,
+            "role_id": 3,
+            "permission_id": 19
+          },
+          {
+            "id": 60,
+            "role_id": 3,
+            "permission_id": 20
+          },
+          {
+            "id": 61,
+            "role_id": 3,
+            "permission_id": 21
+          },
+          {
+            "id": 62,
+            "role_id": 3,
+            "permission_id": 23
+          },
+          {
+            "id": 63,
+            "role_id": 3,
+            "permission_id": 27
+          },
+          {
+            "id": 64,
+            "role_id": 3,
+            "permission_id": 28
+          },
+          {
+            "id": 65,
+            "role_id": 3,
+            "permission_id": 33
+          }
+        ],
+        "settings": [
+          {
+            "id": 1,
+            "uuid": "7c068a13-3630-4155-8366-a995001ff9e7",
+            "key": "databaseVersion",
+            "value": "004",
+            "type": "core",
+            "created_at": 1401440654824,
+            "created_by": 1,
+            "updated_at": 1401440654824,
+            "updated_by": 1
+          },
+          {
+            "id": 2,
+            "uuid": "29c4b294-51e5-44e4-b59d-81b3b9176dc1",
+            "key": "dbHash",
+            "value": "17786d2a-e011-4c0a-92dc-03925f47451d",
+            "type": "core",
+            "created_at": 1401440654825,
+            "created_by": 1,
+            "updated_at": 1401440655407,
+            "updated_by": 1
+          },
+          {
+            "id": 3,
+            "uuid": "58ca5b4a-c6d4-42c0-ae7e-bdcd9ea11ac6",
+            "key": "nextUpdateCheck",
+            "value": "1527802429",
+            "type": "core",
+            "created_at": 1401440654825,
+            "created_by": 1,
+            "updated_at": 1527716029310,
+            "updated_by": 1
+          },
+          {
+            "id": 4,
+            "uuid": "ffddb99c-8ec7-4757-8c18-e86662c380a4",
+            "key": "displayUpdateNotification",
+            "value": "0.11.13",
+            "type": "core",
+            "created_at": 1401440654826,
+            "created_by": 1,
+            "updated_at": 1527716029321,
+            "updated_by": 1
+          },
+          {
+            "id": 5,
+            "uuid": "30d98a4d-d5ac-4193-bec7-538c2769a2d7",
+            "key": "title",
+            "value": "Nicolas Chaulet",
+            "type": "blog",
+            "created_at": 1401440654826,
+            "created_by": 1,
+            "updated_at": 1458443270063,
+            "updated_by": 1
+          },
+          {
+            "id": 6,
+            "uuid": "2e781bca-b7dc-425b-9382-1c77213d736f",
+            "key": "description",
+            "value": "",
+            "type": "blog",
+            "created_at": 1401440654827,
+            "created_by": 1,
+            "updated_at": 1458443270066,
+            "updated_by": 1
+          },
+          {
+            "id": 7,
+            "uuid": "d0488611-be71-4c80-bc32-024139fbc567",
+            "key": "email",
+            "value": "n.chaulet@gmail.com",
+            "type": "blog",
+            "created_at": 1401440654827,
+            "created_by": 1,
+            "updated_at": 1410085892022,
+            "updated_by": 1
+          },
+          {
+            "id": 8,
+            "uuid": "f5afbb63-a437-4ddd-8d81-bc02afe794ed",
+            "key": "logo",
+            "value": "/content/images/2014/Aug/avatar.jpeg",
+            "type": "blog",
+            "created_at": 1401440654827,
+            "created_by": 1,
+            "updated_at": 1458443270069,
+            "updated_by": 1
+          },
+          {
+            "id": 9,
+            "uuid": "5ac90ece-7742-414c-8edd-b849603d8f02",
+            "key": "cover",
+            "value": "",
+            "type": "blog",
+            "created_at": 1401440654829,
+            "created_by": 1,
+            "updated_at": 1458443270073,
+            "updated_by": 1
+          },
+          {
+            "id": 10,
+            "uuid": "574fcaaf-7eb2-4cbc-9c95-3c044ceb7664",
+            "key": "defaultLang",
+            "value": "en_US",
+            "type": "blog",
+            "created_at": 1401440654830,
+            "created_by": 1,
+            "updated_at": 1458443270076,
+            "updated_by": 1
+          },
+          {
+            "id": 11,
+            "uuid": "659c4978-6f14-4a1c-a0ab-55d5dea98ad0",
+            "key": "postsPerPage",
+            "value": "6",
+            "type": "blog",
+            "created_at": 1401440654830,
+            "created_by": 1,
+            "updated_at": 1458443270079,
+            "updated_by": 1
+          },
+          {
+            "id": 12,
+            "uuid": "293341c1-3e2a-447b-8624-3df555f68773",
+            "key": "forceI18n",
+            "value": "true",
+            "type": "blog",
+            "created_at": 1401440654832,
+            "created_by": 1,
+            "updated_at": 1458443270082,
+            "updated_by": 1
+          },
+          {
+            "id": 13,
+            "uuid": "9d11f948-e183-413d-9fc2-b6fd74605fcb",
+            "key": "permalinks",
+            "value": "/:slug/",
+            "type": "blog",
+            "created_at": 1401440654833,
+            "created_by": 1,
+            "updated_at": 1458443270085,
+            "updated_by": 1
+          },
+          {
+            "id": 14,
+            "uuid": "8d86dfd8-f4f1-45dc-ada5-bd0578302f48",
+            "key": "activeTheme",
+            "value": "casper",
+            "type": "theme",
+            "created_at": 1401440654834,
+            "created_by": 1,
+            "updated_at": 1458443270088,
+            "updated_by": 1
+          },
+          {
+            "id": 15,
+            "uuid": "bada143f-415e-4498-9117-e52d7a0c0a61",
+            "key": "activeApps",
+            "value": "[]",
+            "type": "app",
+            "created_at": 1401440654835,
+            "created_by": 1,
+            "updated_at": 1408872314949,
+            "updated_by": 1
+          },
+          {
+            "id": 16,
+            "uuid": "b5e5bb35-778c-48af-93eb-705002fd809f",
+            "key": "installedApps",
+            "value": "[]",
+            "type": "app",
+            "created_at": 1401440654835,
+            "created_by": 1,
+            "updated_at": 1519932736295,
+            "updated_by": 1
+          },
+          {
+            "id": 17,
+            "uuid": "1d60a8b6-577a-46bd-81f8-d933526979d3",
+            "key": "ghost_head",
+            "value": "",
+            "type": "blog",
+            "created_at": 1425740528742,
+            "created_by": 1,
+            "updated_at": 1458443270091,
+            "updated_by": 1
+          },
+          {
+            "id": 18,
+            "uuid": "39325616-e408-415c-8d8a-b9e08dfc1eab",
+            "key": "ghost_foot",
+            "value": "<!-- You can safely delete this line if your theme does not require jQuery -->\n<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-1.11.3.min.js\"></script>\n\n",
+            "type": "blog",
+            "created_at": 1425740528746,
+            "created_by": 1,
+            "updated_at": 1458443270094,
+            "updated_by": 1
+          },
+          {
+            "id": 19,
+            "uuid": "cfd76e46-297a-426e-8ee4-f6b30d3fdb44",
+            "key": "labs",
+            "value": "{}",
+            "type": "blog",
+            "created_at": 1425740528747,
+            "created_by": 1,
+            "updated_at": 1458443270097,
+            "updated_by": 1
+          },
+          {
+            "id": 20,
+            "uuid": "0ea5175b-4ff6-4970-a8ef-c6466534b876",
+            "key": "navigation",
+            "value": "[{\"label\":\"Home\", \"url\":\"/\"}]",
+            "type": "blog",
+            "created_at": 1425740528747,
+            "created_by": 1,
+            "updated_at": 1458443270099,
+            "updated_by": 1
+          },
+          {
+            "id": 21,
+            "uuid": "d75963f1-cff8-4011-89f7-1bdab1d9e277",
+            "key": "isPrivate",
+            "value": "false",
+            "type": "private",
+            "created_at": 1441628704948,
+            "created_by": 1,
+            "updated_at": 1458443270102,
+            "updated_by": 1
+          },
+          {
+            "id": 22,
+            "uuid": "4581eae1-1a10-4899-bcdf-6b41f1b2061a",
+            "key": "password",
+            "value": "",
+            "type": "private",
+            "created_at": 1441628704951,
+            "created_by": 1,
+            "updated_at": 1458443270105,
+            "updated_by": 1
+          }
+        ],
+        "tags": [
+          {
+            "id": 1,
+            "uuid": "20b75550-1dc8-48f8-9530-0fdf26ed8e48",
+            "name": "Getting Started",
+            "slug": "getting-started",
+            "description": null,
+            "parent_id": null,
+            "meta_title": null,
+            "meta_description": null,
+            "created_at": 1401440654589,
+            "created_by": 1,
+            "updated_at": 1401440654589,
+            "updated_by": 1,
+            "image": null,
+            "hidden": 0
+          },
+          {
+            "id": 2,
+            "uuid": "e9cbfd13-908e-453a-ad68-bce518a869ac",
+            "name": "angularjs",
+            "slug": "angularjs",
+            "description": null,
+            "parent_id": null,
+            "meta_title": null,
+            "meta_description": null,
+            "created_at": 1401642751031,
+            "created_by": 1,
+            "updated_at": 1401642751031,
+            "updated_by": 1,
+            "image": null,
+            "hidden": 0
+          },
+          {
+            "id": 3,
+            "uuid": "5ed526c5-e07e-49fa-bc42-d06a489689d5",
+            "name": "docker",
+            "slug": "docker",
+            "description": null,
+            "parent_id": null,
+            "meta_title": null,
+            "meta_description": null,
+            "created_at": 1430145651107,
+            "created_by": 1,
+            "updated_at": 1430145651107,
+            "updated_by": 1,
+            "image": null,
+            "hidden": 0
+          },
+          {
+            "id": 4,
+            "uuid": "20014afa-f56b-4b61-9f58-51b2b7750c91",
+            "name": "tips",
+            "slug": "tips",
+            "description": null,
+            "parent_id": null,
+            "meta_title": null,
+            "meta_description": null,
+            "created_at": 1430767868552,
+            "created_by": 1,
+            "updated_at": 1430767868552,
+            "updated_by": 1,
+            "image": null,
+            "hidden": 0
+          }
+        ],
+        "posts_tags": [
+          {
+            "id": 2,
+            "post_id": 3,
+            "tag_id": 2,
+            "sort_order": 0
+          },
+          {
+            "id": 21,
+            "post_id": 9,
+            "tag_id": 3,
+            "sort_order": 0
+          },
+          {
+            "id": 22,
+            "post_id": 9,
+            "tag_id": 4,
+            "sort_order": 1
+          }
+        ],
+        "permissions_apps": [],
+        "apps": [],
+        "app_settings": [],
+        "app_fields": [],
+        "client_trusted_domains": []
+      }
+    }
+  ]
+}
