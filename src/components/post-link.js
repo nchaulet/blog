@@ -1,17 +1,16 @@
-import React from 'react'
-import Link from 'gatsby-link'
+import React from "react";
+import Link from "gatsby-link";
 
 import styled from "styled-components";
 
 const Date = styled.span`
   color: #264e86;
   opacity: 0.6;
-  text-decoration: 'none';
+  text-decoration: "none";
   margin-right: 0.5em;
 `;
 
-const Title = styled.span`
-`;
+const Title = styled.span``;
 
 const Post = styled(Link)`
   color: #0074e4;
@@ -31,6 +30,6 @@ const PostLink = ({ post }) => (
       <Title>{post.frontmatter.title}</Title>
     </Post>
   </PostLinkContainer>
-)
+);
 
-export default PostLink
+export default PostLink;
