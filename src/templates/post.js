@@ -1,6 +1,7 @@
-import React from 'react'
-import styled from 'styled-components';
-
+import React from "react";
+import styled from "styled-components";
+import Layout from "../components/layout";
+import { graphql } from "gatsby";
 
 const LabelH2 = styled.h2`
   background-color: #264e86;
@@ -11,18 +12,18 @@ const LabelH2 = styled.h2`
   font-weight: normal;
   border-radius: 0.2rem;
   opacity: 0.9;
-  float:right;
+  float: right;
 `;
 
-export default function Template({
-  data, // this prop will be injected by the GraphQL query below.
+function Template({
+  data // this prop will be injected by the GraphQL query below.
 }) {
-  const { markdownRemark } = data // data.markdownRemark holds our post data
-  const { frontmatter, html } = markdownRemark
+  const { markdownRemark } = data; // data.markdownRemark holds our post data
+  const { frontmatter, html } = markdownRemark;
   return (
     <div className="blog-post-container">
       <div className="blog-post">
-      <LabelH2>{frontmatter.date}</LabelH2>
+        <LabelH2>{frontmatter.date}</LabelH2>
         <h1>{frontmatter.title}</h1>
 
         <div
@@ -31,8 +32,14 @@ export default function Template({
         />
       </div>
     </div>
-  )
+  );
 }
+
+export default props => (
+  <Layout location={props.location}>
+    <Template {...props} />
+  </Layout>
+);
 
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
@@ -45,4 +52,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;

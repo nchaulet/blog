@@ -1,19 +1,25 @@
-import React from 'react'
-import PostLink from '../components/post-link'
+import React from "react";
+import PostLink from "../components/post-link";
+import Layout from "../components/layout";
+import { graphql } from "gatsby";
 
 const IndexPage = ({
   data: {
-    allMarkdownRemark: { edges },
-  },
+    allMarkdownRemark: { edges }
+  }
 }) => {
   const Posts = edges
     .filter(edge => !!edge.node.frontmatter.date) // You can filter your posts based on some criteria
-    .map(edge => <PostLink key={edge.node.id} post={edge.node} />)
+    .map(edge => <PostLink key={edge.node.id} post={edge.node} />);
 
-  return <div>{Posts}</div>
-}
+  return <div>{Posts}</div>;
+};
 
-export default IndexPage
+export default props => (
+  <Layout location={props.location}>
+    <IndexPage {...props} />
+  </Layout>
+);
 
 export const pageQuery = graphql`
   query IndexQuery {
@@ -31,4 +37,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
