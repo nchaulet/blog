@@ -1,0 +1,34 @@
+---
+path: "/compose-express-middlewares"
+date: "2018-10-30"
+title: "Compose express middlewares"
+---
+
+Function composition is a great tool, to allow to create a more isolated function with clear responsibility and single purpose. Function composition allows combining these functions to create a more complex one.
+
+This pattern can also be used to express middlewares. This allows having more isolated middlewares, easier to test. And to expose a composed middleware that can guarantee that a middleware is going to be called after another one.
+
+```
+const express = require('express');
+
+function middleware1(req, res, next) {
+  req.var1 = logic1();
+}
+function middleware2(req, res, next) {
+  req.var2 = logic2(req.var1);
+}
+function middleware3(req, res, next) {
+  req.var3 = logic3(req.var1, req.vqr2);
+}
+
+const myFinalMiddleware = express.Router().use(middleware1, middleware2, middleware3);
+```
+
+And you can use your middleware after like any other middleware
+
+```
+const app = express();
+app.use(myFinalMiddleware);
+```
+
+This tips allow you to have thinner middleware with single responsability.
