@@ -12,6 +12,12 @@ module.exports = {
         name: "markdown-pages",
       },
     },
-    'gatsby-transformer-remark'
+    'gatsby-transformer-remark',
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-34324075-3"
+      },
+    }
   ],
 }
