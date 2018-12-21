@@ -17,5 +17,9 @@ action "Deploy" {
 action "nchaulet/github-action-gh-pages@master" {
   uses = "nchaulet/github-action-gh-pages@master"
   needs = ["Deploy"]
-  secrets = ["GITHUB_TOKEN"]
+  secrets = [
+    "GITHUB_TOKEN",
+    "GIT_EMAIL",
+    "GIT_USERNAME",
+  ]
 }
