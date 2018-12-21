@@ -5,15 +5,13 @@ workflow "Build and deploy" {
 
 action "GitHub Action for npm" {
   uses = "actions/npm@e7aaefe"
-  secrets = ["GITHUB_TOKEN"]
   args = "install"
 }
 
 action "Deploy" {
   uses = "actions/npm@e7aaefe"
   needs = ["GitHub Action for npm"]
-  secrets = ["GITHUB_TOKEN"]
-  args = "run deploy"
+  args = "run build"
 }
 
 action "nchaulet/github-action-gh-pages@master" {
