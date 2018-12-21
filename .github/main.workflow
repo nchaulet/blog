@@ -1,10 +1,17 @@
 workflow "Build and deploy" {
   on = "push"
-  resolves = ["GitHub Action for npm"]
+  resolves = ["Deploy"]
 }
 
 action "GitHub Action for npm" {
   uses = "actions/npm@e7aaefe"
-  runs = "deploy"
   secrets = ["GITHUB_TOKEN"]
+  args = "install"
+}
+
+action "Deploy" {
+  uses = "actions/npm@e7aaefe"
+  needs = ["GitHub Action for npm"]
+  secrets = ["GITHUB_TOKEN"]
+  args = "run deploy"
 }
