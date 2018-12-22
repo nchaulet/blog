@@ -1,33 +1,29 @@
 workflow "Build and deploy" {
   on = "push"
-  resolves = [
-    "nchaulet/github-action-gh-pages@master"
-  ]
+  resolves = ["Deploy"]
 }
 
-action "Master" {
+action "Filter Master" {
   uses = "actions/bin/filter@b2bea07"
   args = "branch master"
 }
 
-action "GitHub Action for npm" {
-  needs = ["Master"]
+action "Npm install" {
   uses = "actions/npm@e7aaefe"
   args = "install"
+  needs = ["Filter Master"]
+}
+
+action "Npm build" {
+  uses = "actions/npm@e7aaefe"
+  args = "run build"
+  needs = ["Npm install"]
 }
 
 action "Deploy" {
-  uses = "actions/npm@e7aaefe"
-  needs = ["GitHub Action for npm"]
-  args = "run build"
-}
-
-action "nchaulet/github-action-gh-pages@master" {
   uses = "nchaulet/github-action-gh-pages@master"
-  needs = ["Deploy"]
   secrets = [
     "GITHUB_TOKEN",
-    "GIT_EMAIL",
-    "GIT_USERNAME",
   ]
+  needs = ["Npm build"]
 }
