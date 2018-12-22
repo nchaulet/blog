@@ -1,9 +1,17 @@
 workflow "Build and deploy" {
   on = "push"
-  resolves = ["nchaulet/github-action-gh-pages@master"]
+  resolves = [
+    "nchaulet/github-action-gh-pages@master"
+  ]
+}
+
+action "Master" {
+  uses = "actions/bin/filter@b2bea07"
+  args = "branch master"
 }
 
 action "GitHub Action for npm" {
+  needs = ["Master"]
   uses = "actions/npm@e7aaefe"
   args = "install"
 }
