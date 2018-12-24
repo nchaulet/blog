@@ -12,4 +12,4 @@ I decided to implement my own action to deploy to Github pages. You just need to
 
 The result is here [My first github action](https://github.com/nchaulet/github-action-gh-pages)
 
-And this blog is now deployed using github actions. ([see workflow](https://github.com/nchaulet/blog/blob/master/.github/main.workflow)).
+And this blog is now deployed using github actions ([see workflow](https://github.com/nchaulet/blog/blob/master/.github/main.workflow)).
