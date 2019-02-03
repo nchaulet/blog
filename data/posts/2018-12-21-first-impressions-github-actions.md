@@ -10,6 +10,6 @@ It's easy to start you have a UI where you can add basic actions like running np
 
 I decided to implement my own action to deploy to Github pages. You just need to create a GitHub repository with a `Dockerfile` inside. When GitHub is going to execute your action the repo and results of previous actions are going to be mount in `/github/workspace`.
 
-The result is here [My first github action](https://github.com/nchaulet/github-action-gh-pages)
+The result is here [My first github action](https://github.com/nchaulet/github-action-gh-pages).
 
 And this blog is now deployed using github actions ([see workflow](https://github.com/nchaulet/blog/blob/master/.github/main.workflow)).
