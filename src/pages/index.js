@@ -17,6 +17,8 @@ const IndexPage = ({
 
 export default props => (
   <Layout location={props.location}>
+    <hr/>
+    <h2 style={{ color: "#264e86" }}>Latests posts</h2>
     <IndexPage {...props} />
   </Layout>
 );

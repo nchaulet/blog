@@ -614,3 +614,7 @@ pre tt:after {
     font-size: 100%;
   }
 }
+
+svg > path {
+  fill: #264e86
+}
