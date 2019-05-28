@@ -1,10 +1,93 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Nicolas Chaulet - Web Developer]]></title><description><![CDATA[Personal blog]]></description><link>https://blog.nchaulet.fr</link><generator>RSS for Node</generator><lastBuildDate>Sun, 31 Mar 2019 21:40:32 GMT</lastBuildDate><item><title><![CDATA[First impressions with github actions]]></title><description><![CDATA[A few weeks ago Github published  Github Actions . In the beginning, the feature was accessible only for private repositories, but they just…]]></description><link>https://blog.nchaulet.fr/first-impressions-github-actions</link><guid isPermaLink="false">https://blog.nchaulet.fr/first-impressions-github-actions</guid><pubDate>Fri, 21 Dec 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A few weeks ago Github published &lt;a href=&quot;https://github.com/features/actions&quot;&gt;Github Actions&lt;/a&gt;. In the beginning, the feature was accessible only for private repositories, but they just released it for public ones. I wanted to give it a try and what better project than my personal blog to try new technologies, I decided to move the deployment of my blog to Github Actions.&lt;/p&gt;
-&lt;p&gt;It&apos;s easy to start you have a UI where you can add basic actions like running npm scripts, but to deploy my blogs I used the npm module &lt;code&gt;gh-pages&lt;/code&gt; that rely on having git installed on the machine, and it was not the case with the default npm Github action.&lt;/p&gt;
-&lt;p&gt;I decided to implement my own action to deploy to Github pages. You just need to create a GitHub repository with a &lt;code&gt;Dockerfile&lt;/code&gt; inside. When GitHub is going to execute your action the repo and results of previous actions are going to be mount in &lt;code&gt;/github/workspace&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The result is here &lt;a href=&quot;https://github.com/nchaulet/github-action-gh-pages&quot;&gt;My first github action&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;And this blog is now deployed using github actions (&lt;a href=&quot;https://github.com/nchaulet/blog/blob/master/.github/main.workflow&quot;&gt;see workflow&lt;/a&gt;).&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Compose express middlewares]]></title><description><![CDATA[Function composition is a great tool, to allow to create a more isolated function with clear responsibility and single purpose. Function…]]></description><link>https://blog.nchaulet.fr/compose-express-middlewares</link><guid isPermaLink="false">https://blog.nchaulet.fr/compose-express-middlewares</guid><pubDate>Tue, 30 Oct 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Function composition is a great tool, to allow to create a more isolated function with clear responsibility and single purpose. Function composition allows combining these functions to create a more complex one.&lt;/p&gt;
-&lt;p&gt;This pattern can also be used to express middlewares. This allows having more isolated middlewares, easier to test. And to expose a composed middleware that can guarantee that a middleware is going to be called after another one.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;const express = require(&apos;express&apos;);
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Nicolas Chaulet - Web Developer]]></title><description><![CDATA[Personal blog]]></description><link>https://blog.nchaulet.fr</link><generator>RSS for Node</generator><lastBuildDate>Tue, 28 May 2019 21:18:09 GMT</lastBuildDate><item><title><![CDATA[Using React hooks in forms]]></title><description><![CDATA[According to Dan Abramov and lot of users of the React API, Hooks are the future of React. Let's see how we can use them to manage a Form…]]></description><link>https://blog.nchaulet.fr/react-hooks-form</link><guid isPermaLink="false">https://blog.nchaulet.fr/react-hooks-form</guid><pubDate>Tue, 28 May 2019 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;According to Dan Abramov and lot of users of the React API, Hooks are the future of React. Let&amp;#x27;s see how we can use them to manage a Form.&lt;/p&gt;&lt;p&gt;We are going to use a very common form to register a user: two inputs an email and a password.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; metastring=&quot;live=true&quot; live=&quot;true&quot;&gt;&amp;lt;form&amp;gt;
+  &amp;lt;input placeholder=&amp;quot;email&amp;quot; /&amp;gt;
+  &amp;lt;input type=&amp;quot;password&amp;quot; placeholder=&amp;quot;password&amp;quot; /&amp;gt;
+  &amp;lt;button type=&amp;quot;button&amp;quot;&amp;gt;register&amp;lt;/button&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Let&amp;#x27;s capture our input, for that we are going to create a hook &lt;code&gt;useInput&lt;/code&gt; that is going to manage the state of our input.
+On submit we are going to trigger an alert with the content of our form.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; metastring=&quot;live=true noInline=true&quot; live=&quot;true&quot; noInline=&quot;true&quot;&gt;function useInput(defaultValue = &amp;quot;&amp;quot;) {
+  const [value, setValue] = useState(defaultValue);
+
+  const onChange = (e) =&amp;gt; setValue(e.target.value);
+
+  return {
+    value,
+    onChange
+  };
+}
+
+function Form() {
+  const emailInput = useInput();
+  const passwordInput = useInput();
+
+  const onSubmit = useCallback((e) =&amp;gt; {
+    e.preventDefault();
+    alert(`
+      Submit Form
+      -----------
+      email: ${emailInput.value}
+      password: ${passwordInput.value}
+    `);
+  });
+
+  return (
+    &amp;lt;form onSubmit={onSubmit}&amp;gt;
+      &amp;lt;input {...emailInput} placeholder=&amp;quot;email&amp;quot; /&amp;gt;
+      &amp;lt;input {...passwordInput} type=&amp;quot;password&amp;quot; placeholder=&amp;quot;password&amp;quot; /&amp;gt;
+      &amp;lt;button&amp;gt;register&amp;lt;/button&amp;gt;
+    &amp;lt;/form&amp;gt;
+  );
+}
+render(Form);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And add some validation, here we are using the Constraint API (&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Constraint_API&amp;#x27;s_element.setCustomValidity()&quot;&gt;see doc&lt;/a&gt;).&lt;/p&gt;&lt;p&gt;The Constraint API is currently not totally supported by Internet Explorer.
+This API allow to mark an input as invalid with the &lt;code&gt;setCustomValidity()&lt;/code&gt; method, you need to trigger the display of the message with a call to &lt;code&gt;reportValidity()&lt;/code&gt;.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; metastring=&quot;live=true noInline=true&quot; live=&quot;true&quot; noInline=&quot;true&quot;&gt;function useInput(validateRegex = null, validateErrorMessage = null) {
+  const defaultValue = &amp;quot;&amp;quot;;
+  const [value, setValue] = useState(defaultValue);
+
+  const onChange = (e) =&amp;gt; {
+    setValue(e.target.value)
+    if (validateRegex) {
+      if (e.target.value.match(validateRegex)) {
+        e.target.setCustomValidity(&amp;quot;&amp;quot;);
+      } else {
+        e.target.setCustomValidity(validateErrorMessage);
+      }
+      e.target.reportValidity();
+    }
+  };
+
+
+  return {
+    value,
+    onChange,
+    required: true
+  };
+}
+const GMAIL_EMAIL_REGEX =  /^(([^&amp;lt;&amp;gt;()\[\]\\.,;:\s@&amp;quot;]+(\.[^&amp;lt;&amp;gt;()\[\]\\.,;:\s@&amp;quot;]+)*)|(&amp;quot;.+&amp;quot;))@gmail\.com$/;
+
+function Form() {
+  const emailInput = useInput(GMAIL_EMAIL_REGEX, &amp;quot;Not a valid email! support only @gmail.com address&amp;quot;);
+  const passwordInput = useInput(/^[^\s-]{3+}$/, &amp;quot;Password should be at least 3 non whitespace caracters&amp;quot;);
+
+  const onSubmit = useCallback((e) =&amp;gt; {
+    e.preventDefault();
+    alert(`
+      Submit Form
+      -----------
+      email: ${emailInput.value}
+      password: ${passwordInput.value}
+    `);
+  });
+
+  return (
+    &amp;lt;form onSubmit={onSubmit}&amp;gt;
+      &amp;lt;input {...emailInput} placeholder=&amp;quot;email&amp;quot; /&amp;gt;
+      &amp;lt;input {...passwordInput} type=&amp;quot;password&amp;quot; placeholder=&amp;quot;password&amp;quot; /&amp;gt;
+      &amp;lt;button&amp;gt;register&amp;lt;/button&amp;gt;
+    &amp;lt;/form&amp;gt;
+  );
+}
+render(Form);
+&lt;/code&gt;&lt;/pre&gt;</content:encoded></item><item><title><![CDATA[First impressions with github actions]]></title><description><![CDATA[A few weeks ago Github published  Github Actions . In the beginning, the feature was accessible only for private repositories, but they just…]]></description><link>https://blog.nchaulet.fr/first-impressions-github-actions</link><guid isPermaLink="false">https://blog.nchaulet.fr/first-impressions-github-actions</guid><pubDate>Fri, 21 Dec 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A few weeks ago Github published &lt;a href=&quot;https://github.com/features/actions&quot;&gt;Github Actions&lt;/a&gt;. In the beginning, the feature was accessible only for private repositories, but they just released it for public ones. I wanted to give it a try and what better project than my personal blog to try new technologies, I decided to move the deployment of my blog to Github Actions.&lt;/p&gt;&lt;p&gt;It&amp;#x27;s easy to start you have a UI where you can add basic actions like running npm scripts, but to deploy my blogs I used the npm module &lt;code&gt;gh-pages&lt;/code&gt; that rely on having git installed on the machine, and it was not the case with the default npm Github action.&lt;/p&gt;&lt;p&gt;I decided to implement my own action to deploy to Github pages. You just need to create a GitHub repository with a &lt;code&gt;Dockerfile&lt;/code&gt; inside. When GitHub is going to execute your action the repo and results of previous actions are going to be mount in &lt;code&gt;/github/workspace&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;The result is here &lt;a href=&quot;https://github.com/nchaulet/github-action-gh-pages&quot;&gt;My first github action&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;And this blog is now deployed using github actions (&lt;a href=&quot;https://github.com/nchaulet/blog/blob/master/.github/main.workflow&quot;&gt;see workflow&lt;/a&gt;).&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Compose express middlewares]]></title><description><![CDATA[Function composition is a great tool, to allow to create a more isolated function with clear responsibility and single purpose. Function…]]></description><link>https://blog.nchaulet.fr/compose-express-middlewares</link><guid isPermaLink="false">https://blog.nchaulet.fr/compose-express-middlewares</guid><pubDate>Tue, 30 Oct 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Function composition is a great tool, to allow to create a more isolated function with clear responsibility and single purpose. Function composition allows combining these functions to create a more complex one.&lt;/p&gt;&lt;p&gt;This pattern can also be used to express middlewares. This allows having more isolated middlewares, easier to test. And to expose a composed middleware that can guarantee that a middleware is going to be called after another one.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const express = require(&amp;#x27;express&amp;#x27;);
 
 function middleware1(req, res, next) {
   req.var1 = logic1();
@@ -17,32 +100,11 @@ function middleware3(req, res, next) {
 }
 
 const myFinalMiddleware = express.Router().use(middleware1, middleware2, middleware3);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And you can use your middleware after like any other middleware&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;const app = express();
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And you can use your middleware after like any other middleware&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const app = express();
 app.use(myFinalMiddleware);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This tips allow you to have thinner middleware with single responsability.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[NPM tips]]></title><description><![CDATA[Save package exact version Because a lot of node package are not using semver, it is a good practice to save package exact version. or set…]]></description><link>https://blog.nchaulet.fr/npm-tips-2016</link><guid isPermaLink="false">https://blog.nchaulet.fr/npm-tips-2016</guid><pubDate>Sun, 20 Mar 2016 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;/images/2016/03/npm.png&quot; alt=&quot;NPM&quot;&gt;&lt;/p&gt;
-&lt;h3&gt;Save package exact version&lt;/h3&gt;
-&lt;p&gt;Because a lot of node package are not using semver, it is a good practice to save package exact version.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save --save-exact
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;or set the option globally&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;npm config set save-exact=true
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Do not use npm start for production&lt;/h3&gt;
-&lt;p&gt;If you application intercept unix signals (SIGINT, SIGTERM) for clean exit do not use npm start to launch your app.&lt;/p&gt;
-&lt;h3&gt;NPM shortcut&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;use &lt;code&gt;npm i&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;use &lt;code&gt;npm i -S&lt;/code&gt; instead of &lt;code&gt;npm install --save&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;use &lt;code&gt;npm i -D&lt;/code&gt; instead of &lt;code&gt;npm install --save-dev&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;use &lt;code&gt;npm r&lt;/code&gt; instead of &lt;code&gt;npm uninstall&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Cache npm install on docker]]></title><description><![CDATA[Docker had a great cache mechanism, and you can easily use it to improve your image build time. Node Application Dockerfile You can use the…]]></description><link>https://blog.nchaulet.fr/cache-npm-install-on-docker</link><guid isPermaLink="false">https://blog.nchaulet.fr/cache-npm-install-on-docker</guid><pubDate>Sun, 13 Sep 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Docker had a great cache mechanism, and you can easily use it to improve your image build time.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/images/2015/09/docker-node.jpeg&quot;&gt;&lt;/p&gt;
-&lt;h2&gt;Node Application Dockerfile&lt;/h2&gt;
-&lt;p&gt;You can use the below Dockerfile to run a simple nodejs application, but for every image build the command &lt;code&gt;npm install&lt;/code&gt; will be executed.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM node
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This tips allow you to have thinner middleware with single responsability.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[NPM tips]]></title><description><![CDATA[Save package exact version Because a lot of node package are not using semver, it is a good practice to save package exact version. or set…]]></description><link>https://blog.nchaulet.fr/npm-tips-2016</link><guid isPermaLink="false">https://blog.nchaulet.fr/npm-tips-2016</guid><pubDate>Sun, 20 Mar 2016 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;/images/2016/03/npm.png&quot; alt=&quot;NPM&quot;/&gt;&lt;/p&gt;&lt;h3&gt;Save package exact version&lt;/h3&gt;&lt;p&gt;Because a lot of node package are not using semver, it is a good practice to save package exact version.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;npm install --save --save-exact
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;or set the option globally&lt;/p&gt;&lt;pre&gt;&lt;code&gt;npm config set save-exact=true
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Do not use npm start for production&lt;/h3&gt;&lt;p&gt;If you application intercept unix signals (SIGINT, SIGTERM) for clean exit do not use npm start to launch your app.&lt;/p&gt;&lt;h3&gt;NPM shortcut&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;use &lt;code&gt;npm i&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt;&lt;/li&gt;&lt;li&gt;use &lt;code&gt;npm i -S&lt;/code&gt; instead of &lt;code&gt;npm install --save&lt;/code&gt;&lt;/li&gt;&lt;li&gt;use &lt;code&gt;npm i -D&lt;/code&gt; instead of &lt;code&gt;npm install --save-dev&lt;/code&gt;&lt;/li&gt;&lt;li&gt;use &lt;code&gt;npm r&lt;/code&gt; instead of &lt;code&gt;npm uninstall&lt;/code&gt;&lt;/li&gt;&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Cache npm install on docker]]></title><description><![CDATA[Docker had a great cache mechanism, and you can easily use it to improve your image build time. Node Application Dockerfile You can use the…]]></description><link>https://blog.nchaulet.fr/cache-npm-install-on-docker</link><guid isPermaLink="false">https://blog.nchaulet.fr/cache-npm-install-on-docker</guid><pubDate>Sun, 13 Sep 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Docker had a great cache mechanism, and you can easily use it to improve your image build time.&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/images/2015/09/docker-node.jpeg&quot;/&gt;&lt;/p&gt;&lt;h2&gt;Node Application Dockerfile&lt;/h2&gt;&lt;p&gt;You can use the below Dockerfile to run a simple nodejs application, but for every image build the command &lt;code&gt;npm install&lt;/code&gt; will be executed.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM node
 
 ADD . /code
 WORKDIR /code
@@ -50,10 +112,7 @@ WORKDIR /code
 RUN npm install
 
 CMD npm start
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Use docker layer cache&lt;/h2&gt;
-&lt;p&gt;A great optimization to the previous Dockerfile is to run &lt;code&gt;npm install&lt;/code&gt; before adding your codebase. For this you will have to add &lt;code&gt;package.json&lt;/code&gt; and to run &lt;code&gt;nmp install&lt;/code&gt;, before you add your codebase.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM node
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Use docker layer cache&lt;/h2&gt;&lt;p&gt;A great optimization to the previous Dockerfile is to run &lt;code&gt;npm install&lt;/code&gt; before adding your codebase. For this you will have to add &lt;code&gt;package.json&lt;/code&gt; and to run &lt;code&gt;nmp install&lt;/code&gt;, before you add your codebase.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM node
 
 ADD ./package.json /code/package.json
 WORKDIR /code
@@ -62,155 +121,69 @@ RUN npm install
 ADD . /code
 
 CMD npm start
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Conclusion&lt;/h3&gt;
-&lt;p&gt;Now your &lt;code&gt;npm install&lt;/code&gt; are cached and will be rerunned only if your &lt;code&gt;package.json&lt;/code&gt; changes, making your image build time faster.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ReactEurope 2015: Notes]]></title><description><![CDATA[Last week I was lucky enough to attend the ReactEurope Event in Paris, and it was a really interesting experience. Speakers and talks were…]]></description><link>https://blog.nchaulet.fr/reacteurope-2015-my-notes</link><guid isPermaLink="false">https://blog.nchaulet.fr/reacteurope-2015-my-notes</guid><pubDate>Mon, 06 Jul 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;/images/2015/07/reacteurope-1.png&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Last week I was lucky enough to attend the ReactEurope Event in Paris, and it was a really interesting experience. Speakers and talks were amazing, and the organization of the event was perfect.&lt;/p&gt;
-&lt;p&gt;Here are some notes I take during the event(Raw):&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Inline Style:&lt;/strong&gt; Inline style seems to be a good practice for state related style. And javascript style library like &lt;a href=&quot;https://github.com/FormidableLabs/radium&quot;&gt;Radium&lt;/a&gt; are really useful for inline style.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;GraphQL:&lt;/strong&gt; GraphQL seems to be a really good solution to serve data to multiple clients, and allow you to limit the number of request and data to fetch for mobile devices. It’s a promising new approach to retrieve Data, and it could be plugged over your existing datastore (API REST, ...). A &lt;a href=&quot;https://github.com/facebook/graphql&quot;&gt;Specification Draft&lt;/a&gt; of graphQL and an implementation of a &lt;a href=&quot;https://github.com/graphql/graphql-js&quot;&gt;graphQL Server&lt;/a&gt; were released during the event.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Relay&lt;/strong&gt;: the glue between graphQL server and your&apos;s React Application should be released in august 2015.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Animation:&lt;/strong&gt; RIP ReactCSSTransitionGroup, the future of animation in react and react-native should bee less painfull.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Redux and hot reload&lt;/strong&gt;: &lt;a href=&quot;https://github.com/gaearon/redux&quot;&gt;Redux flux implemenation&lt;/a&gt;, with store as reductor function, seems to be the Flux library to use in 2015. Hot reload improve really the developper experience and the future redux dev tools with state history navigation demo was amazing and should be released soon.&lt;/p&gt;
-&lt;p&gt;With a huge comunity, a great developper experience, reactJS and flux is really a great solution to build amazing UI. Add to this react-native for mobile development, and react should be the library to use in 2015.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Boot2docker with NFS on OSX]]></title><description><![CDATA[
-Boot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is  vboxfs , which can be an…]]></description><link>https://blog.nchaulet.fr/boot2docker-nfs-on-mac</link><guid isPermaLink="false">https://blog.nchaulet.fr/boot2docker-nfs-on-mac</guid><pubDate>Mon, 27 Apr 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;/images/2015/04/homepage-docker-logo-1.png&quot;&gt;
-Boot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is &lt;code&gt;vboxfs&lt;/code&gt;, which can be an issue.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Vboxfs&lt;/code&gt; is really slow and you may encounter access and performance issues.&lt;/p&gt;
-&lt;p&gt;A good solution is to use &lt;code&gt;nfs&lt;/code&gt; to share your folders.&lt;/p&gt;
-&lt;h2&gt;How to share your folders&lt;/h2&gt;
-&lt;p&gt;On OSX, run the following comands:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo echo &quot;/Users -mapall=`whoami`:staff `boot2docker ip`&quot; | sudo tee -a /etc/exports
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo nfsd restart
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;To mount a folder on boot2docker VM&lt;/h2&gt;
-&lt;p&gt;Connect yourself to your boot2docker vm using ssh&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;boot2docker ssh
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Then run the following:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo su
-echo &quot;#! /bin/sh
+&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Conclusion&lt;/h3&gt;&lt;p&gt;Now your &lt;code&gt;npm install&lt;/code&gt; are cached and will be rerunned only if your &lt;code&gt;package.json&lt;/code&gt; changes, making your image build time faster.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ReactEurope 2015: Notes]]></title><description><![CDATA[Last week I was lucky enough to attend the ReactEurope Event in Paris, and it was a really interesting experience. Speakers and talks were…]]></description><link>https://blog.nchaulet.fr/reacteurope-2015-my-notes</link><guid isPermaLink="false">https://blog.nchaulet.fr/reacteurope-2015-my-notes</guid><pubDate>Mon, 06 Jul 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;/images/2015/07/reacteurope-1.png&quot;/&gt;&lt;/p&gt;&lt;p&gt;Last week I was lucky enough to attend the ReactEurope Event in Paris, and it was a really interesting experience. Speakers and talks were amazing, and the organization of the event was perfect.&lt;/p&gt;&lt;p&gt;Here are some notes I take during the event(Raw):&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Inline Style:&lt;/strong&gt; Inline style seems to be a good practice for state related style. And javascript style library like &lt;a href=&quot;https://github.com/FormidableLabs/radium&quot;&gt;Radium&lt;/a&gt; are really useful for inline style.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;GraphQL:&lt;/strong&gt; GraphQL seems to be a really good solution to serve data to multiple clients, and allow you to limit the number of request and data to fetch for mobile devices. It’s a promising new approach to retrieve Data, and it could be plugged over your existing datastore (API REST, ...). A &lt;a href=&quot;https://github.com/facebook/graphql&quot;&gt;Specification Draft&lt;/a&gt; of graphQL and an implementation of a &lt;a href=&quot;https://github.com/graphql/graphql-js&quot;&gt;graphQL Server&lt;/a&gt; were released during the event.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Relay&lt;/strong&gt;: the glue between graphQL server and your&amp;#x27;s React Application should be released in august 2015.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Animation:&lt;/strong&gt; RIP ReactCSSTransitionGroup, the future of animation in react and react-native should bee less painfull.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Redux and hot reload&lt;/strong&gt;: &lt;a href=&quot;https://github.com/gaearon/redux&quot;&gt;Redux flux implemenation&lt;/a&gt;, with store as reductor function, seems to be the Flux library to use in 2015. Hot reload improve really the developper experience and the future redux dev tools with state history navigation demo was amazing and should be released soon.&lt;/p&gt;&lt;p&gt;With a huge comunity, a great developper experience, reactJS and flux is really a great solution to build amazing UI. Add to this react-native for mobile development, and react should be the library to use in 2015.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Boot2docker with NFS on OSX]]></title><description><![CDATA[Boot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is  vboxfs , which can be an…]]></description><link>https://blog.nchaulet.fr/boot2docker-nfs-on-mac</link><guid isPermaLink="false">https://blog.nchaulet.fr/boot2docker-nfs-on-mac</guid><pubDate>Mon, 27 Apr 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;/images/2015/04/homepage-docker-logo-1.png&quot;/&gt;&lt;/p&gt;&lt;p&gt;Boot2docker is a really great tool to run docker on a mac computer, but the default option to share folders is &lt;code&gt;vboxfs&lt;/code&gt;, which can be an issue.&lt;/p&gt;&lt;p&gt;&lt;code&gt;Vboxfs&lt;/code&gt; is really slow and you may encounter access and performance issues.&lt;/p&gt;&lt;p&gt;A good solution is to use &lt;code&gt;nfs&lt;/code&gt; to share your folders.&lt;/p&gt;&lt;h2&gt;How to share your folders&lt;/h2&gt;&lt;p&gt;On OSX, run the following comands:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo echo &amp;quot;/Users -mapall=`whoami`:staff `boot2docker ip`&amp;quot; | sudo tee -a /etc/exports
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo nfsd restart
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;To mount a folder on boot2docker VM&lt;/h2&gt;&lt;p&gt;Connect yourself to your boot2docker vm using ssh&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;boot2docker ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then run the following:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo su
+echo &amp;quot;#! /bin/sh
 sleep 1
 sudo umount /Users
 sudo /usr/local/etc/init.d/nfs-client start
-sudo mount 192.168.59.3:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp&quot; &gt; /var/lib/boot2docker/bootlocal.sh
+sudo mount 192.168.59.3:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp&amp;quot; &amp;gt; /var/lib/boot2docker/bootlocal.sh
 sudo chmod a+x /var/lib/boot2docker/bootlocal.sh
 exit
 exit
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now that the above is done, restart your boot2docker vm&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;boot2docker restart
-&lt;/code&gt;&lt;/pre&gt;</content:encoded></item><item><title><![CDATA[Geocoding in node.js with node-geocoder]]></title><description><![CDATA[After more than a year of developing  node-geocoder  library, I finally take the time to write a small article to present you this library…]]></description><link>https://blog.nchaulet.fr/geocoding-with-node-geocoder</link><guid isPermaLink="false">https://blog.nchaulet.fr/geocoding-with-node-geocoder</guid><pubDate>Mon, 26 Jan 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;After more than a year of developing &lt;code&gt;node-geocoder&lt;/code&gt; library, I finally take the time to write a small article to present you this library.&lt;/p&gt;
-&lt;p&gt;Node geocoder is a node.js module which provides an abstraction layer for geocoding and reverse geocoding.&lt;/p&gt;
-&lt;h2&gt;Usage&lt;/h2&gt;
-&lt;p&gt;To install the module it&apos;s really easy : just run the following command to get the latest version:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;npm install node-geocoder
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Then you can geocode your first address :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;// Require the module
-var NodeGeocoder = require(&apos;node-geocoder&apos;);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now that the above is done, restart your boot2docker vm&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;boot2docker restart
+&lt;/code&gt;&lt;/pre&gt;</content:encoded></item><item><title><![CDATA[Geocoding in node.js with node-geocoder]]></title><description><![CDATA[After more than a year of developing  node-geocoder  library, I finally take the time to write a small article to present you this library…]]></description><link>https://blog.nchaulet.fr/geocoding-with-node-geocoder</link><guid isPermaLink="false">https://blog.nchaulet.fr/geocoding-with-node-geocoder</guid><pubDate>Mon, 26 Jan 2015 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;After more than a year of developing &lt;code&gt;node-geocoder&lt;/code&gt; library, I finally take the time to write a small article to present you this library.&lt;/p&gt;&lt;p&gt;Node geocoder is a node.js module which provides an abstraction layer for geocoding and reverse geocoding.&lt;/p&gt;&lt;h2&gt;Usage&lt;/h2&gt;&lt;p&gt;To install the module it&amp;#x27;s really easy : just run the following command to get the latest version:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;npm install node-geocoder
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then you can geocode your first address :&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;// Require the module
+var NodeGeocoder = require(&amp;#x27;node-geocoder&amp;#x27;);
 // Choose a geocoder provider
-var geocoder = NodeGeocoder.get(&apos;google&apos;);
+var geocoder = NodeGeocoder.get(&amp;#x27;google&amp;#x27;);
 
 // Geocode
-geocoder.geocode(&apos;Your adress&apos;)
+geocoder.geocode(&amp;#x27;Your adress&amp;#x27;)
     .then(function(result) {
         console.log(result);
     });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Future of node-geocoder&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;More provider: Currently this library supports 11 geocoding providers. In a near future new providers will appear.&lt;/li&gt;
-&lt;li&gt;Better error handling: I am currently refactoring error handling to be more debugable.&lt;/li&gt;
-&lt;li&gt;A logo ?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;More&lt;/h2&gt;
-&lt;p&gt;Node-geocoder documentation &lt;a href=&quot;http://nchaulet.github.io/node-geocoder/&quot;&gt;http://nchaulet.github.io/node-geocoder/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Github: &lt;a href=&quot;https://github.com/nchaulet/node-geocoder&quot;&gt;https://github.com/nchaulet/node-geocoder&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Publish node package on NPM best practices]]></title><description><![CDATA[As a contributor of some packages on npm, I will try my best to give you some tips on how to publish package on npm. NPM ? Node package…]]></description><link>https://blog.nchaulet.fr/publish-package-on-npm-best-practice</link><guid isPermaLink="false">https://blog.nchaulet.fr/publish-package-on-npm-best-practice</guid><pubDate>Sun, 31 Aug 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;As a contributor of some packages on npm, I will try my best to give you some tips on how to publish package on npm.&lt;/p&gt;
-&lt;h2&gt;NPM ?&lt;/h2&gt;
-&lt;p&gt;Node package manager is the official package manager for nodejs.
-&lt;a href=&quot;https://www.npmjs.org/doc/&quot;&gt;npm doc&lt;/a&gt;&lt;/p&gt;
-&lt;h2&gt;Semver&lt;/h2&gt;
-&lt;p&gt;You must use &lt;a href=&quot;http://semver.org/&quot;&gt;Semver&lt;/a&gt; versioning for your package.&lt;/p&gt;
-&lt;p&gt;If you use Grunt or Gulp, you can use a plugin to release a major or minor version, and automate your release process (&lt;a href=&quot;https://github.com/vojtajina/grunt-bump&quot;&gt;grunt-bump&lt;/a&gt;, &lt;a href=&quot;https://github.com/stevelacy/gulp-bump&quot;&gt;gulp-bump&lt;/a&gt;)&lt;/p&gt;
-&lt;h2&gt;devDependencies&lt;/h2&gt;
-&lt;p&gt;Use &lt;code&gt;devDependencies&lt;/code&gt; key in your &lt;code&gt;package.json&lt;/code&gt; to define dependencies needed in your build or test process. &lt;/p&gt;
-&lt;p&gt;Install package as dev dependencies : &lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;npm install &amp;#x3C;package-name&gt; --save-dev
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You must put your test framework, grunt|gulp plugins, jshint, in &lt;code&gt;devDependencies&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;.npmignore&lt;/h2&gt;
-&lt;p&gt;You can use a &lt;code&gt;.npmignore&lt;/code&gt; file at the root of your project to keep your files and directories out of your package. For example, tests and demo directories can be excluded.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;.npmignore&lt;/code&gt; example file &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;test
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Future of node-geocoder&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;More provider: Currently this library supports 11 geocoding providers. In a near future new providers will appear.&lt;/li&gt;&lt;li&gt;Better error handling: I am currently refactoring error handling to be more debugable.&lt;/li&gt;&lt;li&gt;A logo ?&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;More&lt;/h2&gt;&lt;p&gt;Node-geocoder documentation &lt;a href=&quot;http://nchaulet.github.io/node-geocoder/&quot;&gt;http://nchaulet.github.io/node-geocoder/&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Github: &lt;a href=&quot;https://github.com/nchaulet/node-geocoder&quot;&gt;https://github.com/nchaulet/node-geocoder&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Publish node package on NPM best practices]]></title><description><![CDATA[As a contributor of some packages on npm, I will try my best to give you some tips on how to publish package on npm. NPM ? Node package…]]></description><link>https://blog.nchaulet.fr/publish-package-on-npm-best-practice</link><guid isPermaLink="false">https://blog.nchaulet.fr/publish-package-on-npm-best-practice</guid><pubDate>Sun, 31 Aug 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;As a contributor of some packages on npm, I will try my best to give you some tips on how to publish package on npm.&lt;/p&gt;&lt;h2&gt;NPM ?&lt;/h2&gt;&lt;p&gt;Node package manager is the official package manager for nodejs.
+&lt;a href=&quot;https://www.npmjs.org/doc/&quot;&gt;npm doc&lt;/a&gt;&lt;/p&gt;&lt;h2&gt;Semver&lt;/h2&gt;&lt;p&gt;You must use &lt;a href=&quot;http://semver.org/&quot;&gt;Semver&lt;/a&gt; versioning for your package.&lt;/p&gt;&lt;p&gt;If you use Grunt or Gulp, you can use a plugin to release a major or minor version, and automate your release process (&lt;a href=&quot;https://github.com/vojtajina/grunt-bump&quot;&gt;grunt-bump&lt;/a&gt;, &lt;a href=&quot;https://github.com/stevelacy/gulp-bump&quot;&gt;gulp-bump&lt;/a&gt;)&lt;/p&gt;&lt;h2&gt;devDependencies&lt;/h2&gt;&lt;p&gt;Use &lt;code&gt;devDependencies&lt;/code&gt; key in your &lt;code&gt;package.json&lt;/code&gt; to define dependencies needed in your build or test process. &lt;/p&gt;&lt;p&gt;Install package as dev dependencies : &lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;npm install &amp;lt;package-name&amp;gt; --save-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You must put your test framework, grunt|gulp plugins, jshint, in &lt;code&gt;devDependencies&lt;/code&gt;.&lt;/p&gt;&lt;h2&gt;.npmignore&lt;/h2&gt;&lt;p&gt;You can use a &lt;code&gt;.npmignore&lt;/code&gt; file at the root of your project to keep your files and directories out of your package. For example, tests and demo directories can be excluded.&lt;/p&gt;&lt;p&gt;&lt;code&gt;.npmignore&lt;/code&gt; example file &lt;/p&gt;&lt;pre&gt;&lt;code&gt;test
 .jshintrc
 .travis.yml
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Test your module&lt;/h2&gt;
-&lt;p&gt;Before publishing your node package, it&apos;s really interesting to test it installed, globally or in another project.&lt;/p&gt;
-&lt;p&gt;Global module, if your package define global module you can install this using.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;cd your_module_directory
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Test your module&lt;/h2&gt;&lt;p&gt;Before publishing your node package, it&amp;#x27;s really interesting to test it installed, globally or in another project.&lt;/p&gt;&lt;p&gt;Global module, if your package define global module you can install this using.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;cd your_module_directory
 npm install . -g
 # Test
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You can also test your module in another project using this command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;cd test_project
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can also test your module in another project using this command:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;cd test_project
 npm install you_module-directory
 # Test
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Links&lt;/h2&gt;
-&lt;p&gt;npm documentation : &lt;a href=&quot;https://www.npmjs.org/doc/&quot;&gt;https://www.npmjs.org/doc/&lt;/a&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Links&lt;/h2&gt;&lt;p&gt;npm documentation : &lt;a href=&quot;https://www.npmjs.org/doc/&quot;&gt;https://www.npmjs.org/doc/&lt;/a&gt;
 Semver: &lt;a href=&quot;http://semver.org/&quot;&gt;http://semver.org/&lt;/a&gt;
 Grunt bump: &lt;a href=&quot;https://github.com/vojtajina/grunt-bump&quot;&gt;https://github.com/vojtajina/grunt-bump&lt;/a&gt;
-Gulp bump: &lt;a href=&quot;https://github.com/stevelacy/gulp-bump&quot;&gt;https://github.com/stevelacy/gulp-bump&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Angular e2e tests, Mock your backend]]></title><description><![CDATA[The aim of this article is to show you, how I mock my API when I test my angularjs applications. Why mock your API call? Testing client can…]]></description><link>https://blog.nchaulet.fr/test-angularjs-app-mock-backend</link><guid isPermaLink="false">https://blog.nchaulet.fr/test-angularjs-app-mock-backend</guid><pubDate>Sun, 01 Jun 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;The aim of this article is to show you, how I mock my API when I test my angularjs applications.&lt;/p&gt;
-&lt;h2&gt;Why mock your API call?&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Testing client can be done in separation of the server&lt;/li&gt;
-&lt;li&gt;Because third-party API which is non usable in test&lt;/li&gt;
-&lt;li&gt;I won&apos;t test things twice (server and client)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;How to mock your API&lt;/h2&gt;
-&lt;p&gt;First you will need to add &lt;a href=&quot;https://github.com/angular/bower-angular-mocks&quot;&gt;angular-mock&lt;/a&gt; script to your application.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;# Installation (via bower)
+Gulp bump: &lt;a href=&quot;https://github.com/stevelacy/gulp-bump&quot;&gt;https://github.com/stevelacy/gulp-bump&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Angular e2e tests, Mock your backend]]></title><description><![CDATA[The aim of this article is to show you, how I mock my API when I test my angularjs applications. Why mock your API call? Testing client can…]]></description><link>https://blog.nchaulet.fr/test-angularjs-app-mock-backend</link><guid isPermaLink="false">https://blog.nchaulet.fr/test-angularjs-app-mock-backend</guid><pubDate>Sun, 01 Jun 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;The aim of this article is to show you, how I mock my API when I test my angularjs applications.&lt;/p&gt;&lt;h2&gt;Why mock your API call?&lt;/h2&gt;&lt;ul&gt;&lt;li&gt;Testing client can be done in separation of the server&lt;/li&gt;&lt;li&gt;Because third-party API which is non usable in test&lt;/li&gt;&lt;li&gt;I won&amp;#x27;t test things twice (server and client)&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;How to mock your API&lt;/h2&gt;&lt;p&gt;First you will need to add &lt;a href=&quot;https://github.com/angular/bower-angular-mocks&quot;&gt;angular-mock&lt;/a&gt; script to your application.&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;# Installation (via bower)
 bower install angular-mocks 
 
 # And include this script in your angularjs app
-&amp;#x3C;script type=&quot;text/javascript&quot; src=&quot;bower_components/angular-mocks/angular-mocks.js&quot;&gt;&amp;#x3C;/script&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You can now start to mock you http request.&lt;/p&gt;
-&lt;h3&gt;The hard way&lt;/h3&gt;
-&lt;p&gt;You can mock backend with protractor using the &lt;code&gt;browser.addMockModule()&lt;/code&gt; method.&lt;/p&gt;
-&lt;p&gt;A test example :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;describe(&apos;A test&apos;, function() {
-        it(&apos;should diplay raoul in result&apos; ,function() {
-            browser.addMockModule(&apos;httpBackendMock&apos;,
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;bower_components/angular-mocks/angular-mocks.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can now start to mock you http request.&lt;/p&gt;&lt;h3&gt;The hard way&lt;/h3&gt;&lt;p&gt;You can mock backend with protractor using the &lt;code&gt;browser.addMockModule()&lt;/code&gt; method.&lt;/p&gt;&lt;p&gt;A test example :&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;describe(&amp;#x27;A test&amp;#x27;, function() {
+        it(&amp;#x27;should diplay raoul in result&amp;#x27; ,function() {
+            browser.addMockModule(&amp;#x27;httpBackendMock&amp;#x27;,
             function() {
-                angular.module(&apos;httpBackendMock&apos;,
-               [&apos;mainApp&apos;, &apos;ngMockE2E&apos;])
+                angular.module(&amp;#x27;httpBackendMock&amp;#x27;,
+               [&amp;#x27;mainApp&amp;#x27;, &amp;#x27;ngMockE2E&amp;#x27;])
                 .run(function($httpBackend) {
-                    $httpBackend.whenGET(&apos;/results&apos;).respond(&apos;raoul&apos;);    
+                    $httpBackend.whenGET(&amp;#x27;/results&amp;#x27;).respond(&amp;#x27;raoul&amp;#x27;);    
                 });
             }); 
 
-            browser.get(&apos;/&apos;);
-            var result = element(by.binding(&apos;result&apos;));
-            expect(result.getText()).toEqual(&apos;raoul&apos;);
+            browser.get(&amp;#x27;/&amp;#x27;);
+            var result = element(by.binding(&amp;#x27;result&amp;#x27;));
+            expect(result.getText()).toEqual(&amp;#x27;raoul&amp;#x27;);
         });
 })
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Inconveniences:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Verbose&lt;/li&gt;
-&lt;li&gt;Your fixtures can be injected only once in a scenario.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;The easy way&lt;/h3&gt;
-&lt;p&gt;I developped a tiny nodejs module to make your http mock easier : &lt;a href=&quot;https://github.com/nchaulet/httpbackend&quot;&gt;HttpBackend&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;So now install the httpbackend module &lt;code&gt;npm install httpbackend&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;And then test :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;var HttpBackend = require(&apos;httpbackend&apos;);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Inconveniences:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Verbose&lt;/li&gt;&lt;li&gt;Your fixtures can be injected only once in a scenario.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;The easy way&lt;/h3&gt;&lt;p&gt;I developped a tiny nodejs module to make your http mock easier : &lt;a href=&quot;https://github.com/nchaulet/httpbackend&quot;&gt;HttpBackend&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;So now install the httpbackend module &lt;code&gt;npm install httpbackend&lt;/code&gt;&lt;/p&gt;&lt;p&gt;And then test :&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;var HttpBackend = require(&amp;#x27;httpbackend&amp;#x27;);
 var backend;
 
-describe(&apos;Test Http backend methods&apos;, function() {
+describe(&amp;#x27;Test Http backend methods&amp;#x27;, function() {
     beforeEach(function() {
         backend = new HttpBackend(browser);
     });
@@ -219,21 +192,14 @@ describe(&apos;Test Http backend methods&apos;, function() {
         backend.clear();
     });
 
-    it(&apos;Test whenGET with string response&apos;, function() {
-        backend.whenGET(/result/).respond(&apos;raoul&apos;);
+    it(&amp;#x27;Test whenGET with string response&amp;#x27;, function() {
+        backend.whenGET(/result/).respond(&amp;#x27;raoul&amp;#x27;);
 
-        browser.get(&apos;/&apos;);
+        browser.get(&amp;#x27;/&amp;#x27;);
 
-        var result = element(by.binding(&apos;result&apos;));
-        expect(result.getText()).toEqual(&apos;raoul&apos;);
+        var result = element(by.binding(&amp;#x27;result&amp;#x27;));
+        expect(result.getText()).toEqual(&amp;#x27;raoul&amp;#x27;);
     });
 });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Avantages:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Syntax &lt;/li&gt;
-&lt;li&gt;You can redefine fixtures during a scenario.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Resources&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend&quot;&gt;https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend&lt;/a&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Avantages:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Syntax &lt;/li&gt;&lt;li&gt;You can redefine fixtures during a scenario.&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;Resources&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend&quot;&gt;https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend&lt;/a&gt;
 &lt;a href=&quot;https://github.com/nchaulet/httpbackend&quot;&gt;https://github.com/nchaulet/httpbackend&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Hello World]]></title><description><![CDATA[Hello World]]></description><link>https://blog.nchaulet.fr/hello-world</link><guid isPermaLink="false">https://blog.nchaulet.fr/hello-world</guid><pubDate>Tue, 20 May 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hello World&lt;/p&gt;</content:encoded></item></channel></rss>
