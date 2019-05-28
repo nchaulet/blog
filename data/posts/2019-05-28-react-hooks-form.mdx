@@ -89,9 +89,11 @@ function useInput(validateRegex = null, validateErrorMessage = null) {
 }
 const GMAIL_EMAIL_REGEX =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@gmail\.com$/;
 
+const PASSWORD_REGEX = /^[^\s-]{3,}$/;
+
 function Form() {
   const emailInput = useInput(GMAIL_EMAIL_REGEX, "Not a valid email! support only @gmail.com address");
-  const passwordInput = useInput(/^[^\s-]{3+}$/, "Password should be at least 3 non whitespace caracters");
+  const passwordInput = useInput(PASSWORD_REGEX, "Password should be at least 3 non whitespace caracters");
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
