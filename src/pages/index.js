@@ -5,7 +5,7 @@ import { graphql } from "gatsby";
 
 const IndexPage = ({
   data: {
-    allMarkdownRemark: { edges }
+    allMdx: { edges }
   }
 }) => {
   const Posts = edges
@@ -25,7 +25,7 @@ export default props => (
 
 export const pageQuery = graphql`
   query IndexQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
+    allMdx(sort: { order: DESC, fields: [frontmatter___date] }) {
       edges {
         node {
           id

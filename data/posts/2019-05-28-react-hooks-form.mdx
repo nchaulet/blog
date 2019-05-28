@@ -1,0 +1,115 @@
+---
+path: "/react-hooks-form"
+date: "2019-05-28"
+title: "Using React hooks in forms"
+---
+
+
+According to Dan Abramov and lot of users of the React API, Hooks are the future of React. Let's see how we can use them to manage a Form.
+
+We are going to use a very common form to register a user: two inputs an email and a password.
+
+```js live=true
+<form>
+  <input placeholder="email" />
+  <input type="password" placeholder="password" />
+  <button type="button">register</button>
+</form>
+```
+
+Let's capture our input, for that we are going to create a hook `useInput` that is going to manage the state of our input.
+On submit we are going to trigger an alert with the content of our form.
+
+```js live=true noInline=true
+function useInput(defaultValue = "") {
+  const [value, setValue] = useState(defaultValue);
+
+  const onChange = (e) => setValue(e.target.value);
+
+  return {
+    value,
+    onChange
+  };
+}
+
+function Form() {
+  const emailInput = useInput();
+  const passwordInput = useInput();
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault();
+    alert(`
+      Submit Form
+      -----------
+      email: ${emailInput.value}
+      password: ${passwordInput.value}
+    `);
+  });
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input {...emailInput} placeholder="email" />
+      <input {...passwordInput} type="password" placeholder="password" />
+      <button>register</button>
+    </form>
+  );
+}
+render(Form);
+```
+
+
+And add some validation, here we are using the Constraint API ([see doc](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Constraint_API's_element.setCustomValidity())).
+
+The Constraint API is currently not totally supported by Internet Explorer.
+This API allow to mark an input as invalid with the `setCustomValidity()` method, you need to trigger the display of the message with a call to `reportValidity()`.
+
+```js live=true noInline=true
+function useInput(validateRegex = null, validateErrorMessage = null) {
+  const defaultValue = "";
+  const [value, setValue] = useState(defaultValue);
+
+  const onChange = (e) => {
+    setValue(e.target.value)
+    if (validateRegex) {
+      if (e.target.value.match(validateRegex)) {
+        e.target.setCustomValidity("");
+      } else {
+        e.target.setCustomValidity(validateErrorMessage);
+      }
+      e.target.reportValidity();
+    }
+  };
+
+
+  return {
+    value,
+    onChange,
+    required: true
+  };
+}
+const GMAIL_EMAIL_REGEX =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@gmail\.com$/;
+
+function Form() {
+  const emailInput = useInput(GMAIL_EMAIL_REGEX, "Not a valid email! support only @gmail.com address");
+  const passwordInput = useInput(/^[^\s-]{3+}$/, "Password should be at least 3 non whitespace caracters");
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault();
+    alert(`
+      Submit Form
+      -----------
+      email: ${emailInput.value}
+      password: ${passwordInput.value}
+    `);
+  });
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input {...emailInput} placeholder="email" />
+      <input {...passwordInput} type="password" placeholder="password" />
+      <button>register</button>
+    </form>
+  );
+}
+render(Form);
+```

@@ -8,7 +8,7 @@ Function composition is a great tool, to allow to create a more isolated functio
 
 This pattern can also be used to express middlewares. This allows having more isolated middlewares, easier to test. And to expose a composed middleware that can guarantee that a middleware is going to be called after another one.
 
-```
+```javascript
 const express = require('express');
 
 function middleware1(req, res, next) {
@@ -26,7 +26,7 @@ const myFinalMiddleware = express.Router().use(middleware1, middleware2, middlew
 
 And you can use your middleware after like any other middleware
 
-```
+```javascript
 const app = express();
 app.use(myFinalMiddleware);
 ```
