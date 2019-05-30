@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'Nicolas Chaulet - Web Developer',
     description: 'Personal blog',
-    siteUrl: `https://blog.nchaulet.fr`
+    siteUrl: `https://www.nchaulet.fr`
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -20,6 +20,12 @@ module.exports = {
       options: {
         trackingId: "UA-34324075-3"
       },
+    },
+    {
+      resolve: `gatsby-plugin-disqus`,
+      options: {
+        shortname: `blog-nchaulet`
+      }
     },
     {
       resolve: `gatsby-plugin-feed`,

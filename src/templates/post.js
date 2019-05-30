@@ -5,6 +5,7 @@ import { graphql } from "gatsby";
 import MDXRenderer from "gatsby-mdx/mdx-renderer";
 import { MDXProvider } from '@mdx-js/react'
 import CodeBlock from "../components/code-block";
+import Disqus from "gatsby-plugin-disqus";
 
 const LabelH2 = styled.h2`
   background-color: #264e86;
@@ -28,6 +29,8 @@ function Template({
   data // this prop will be injected by the GraphQL query below.
 }) {
   const { mdx } = data; // data.markdownRemark holds our post data
+
+  const { siteUrl } = data.site.siteMetadata;
   const { frontmatter, code: { body } } = mdx;
   return (
     <div className="blog-post-container">
@@ -35,6 +38,13 @@ function Template({
         <LabelH2>{frontmatter.date}</LabelH2>
         <h1>{frontmatter.title}</h1>
         <MDXRenderer>{body}</MDXRenderer>
+        <br/>
+        <Disqus
+          identifier={frontmatter.path}
+          title={frontmatter.title}
+          url={`${siteUrl}${frontmatter.path}`}
+
+        />
       </div>
     </div>
   );
@@ -50,6 +60,11 @@ export default props => (
 
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
+    site {
+      siteMetadata {
+        siteUrl
+      }
+    }
     mdx(frontmatter: { path: { eq: $path } }) {
       code {
         body

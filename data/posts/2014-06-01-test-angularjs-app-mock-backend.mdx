@@ -18,7 +18,7 @@ First you will need to add [angular-mock](https://github.com/angular/bower-angul
 
 ```shell
 # Installation (via bower)
-bower install angular-mocks 
+bower install angular-mocks
 
 # And include this script in your angularjs app
 <script type="text/javascript" src="bower_components/angular-mocks/angular-mocks.js"></script>
@@ -39,9 +39,9 @@ describe('A test', function() {
 				angular.module('httpBackendMock',
                ['mainApp', 'ngMockE2E'])
 			    .run(function($httpBackend) {
-			        $httpBackend.whenGET('/results').respond('raoul');    
+			        $httpBackend.whenGET('/results').respond('raoul');
 			    });
-			}); 
+			});
 
 			browser.get('/');
 			var result = element(by.binding('result'));
@@ -71,7 +71,7 @@ describe('Test Http backend methods', function() {
 	beforeEach(function() {
     	backend = new HttpBackend(browser);
     });
-    
+
 	afterEach(function() {
 		backend.clear();
 	});
@@ -89,14 +89,14 @@ describe('Test Http backend methods', function() {
 
 Avantages:
 
-* Syntax 
+* Syntax
 * You can redefine fixtures during a scenario.
 
 
 ## Resources
 
-https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend
-https://github.com/nchaulet/httpbackend
+* https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend
+* https://github.com/nchaulet/httpbackend
 
 
 
