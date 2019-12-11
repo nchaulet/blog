@@ -1,25 +1,25 @@
 module.exports = {
   siteMetadata: {
-    title: 'Nicolas Chaulet - Web Developer',
-    description: 'Personal blog',
+    title: "Nicolas Chaulet - Web Developer",
+    description: "Personal blog",
     siteUrl: `https://www.nchaulet.fr`
   },
   plugins: [
-    'gatsby-plugin-react-helmet',
-    'gatsby-plugin-styled-components',
-    'gatsby-mdx',
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-styled-components",
+    "gatsby-plugin-mdx",
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/data/posts`,
-        name: "markdown-pages",
-      },
+        name: "markdown-pages"
+      }
     },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
         trackingId: "UA-34324075-3"
-      },
+      }
     },
     {
       resolve: `gatsby-plugin-disqus`,
@@ -50,9 +50,9 @@ module.exports = {
                   description: edge.node.excerpt,
                   url: site.siteMetadata.siteUrl + edge.node.frontmatter.path,
                   guid: site.siteMetadata.siteUrl + edge.node.frontmatter.path,
-                  custom_elements: [{ "content:encoded": edge.node.html }],
-                })
-              })
+                  custom_elements: [{ "content:encoded": edge.node.html }]
+                });
+              });
             },
             query: `
               {
@@ -75,10 +75,10 @@ module.exports = {
               }
             `,
             output: "/rss.xml",
-            title: "Gatsby RSS Feed",
-          },
-        ],
-      },
-    },
-  ],
-}
+            title: "Gatsby RSS Feed"
+          }
+        ]
+      }
+    }
+  ]
+};

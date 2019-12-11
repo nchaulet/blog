@@ -52,7 +52,8 @@ dfn {
 }
 h1 {
   font-size: 2em;
-  margin: .67em 0;
+  font-weight: 500;
+  margin: 0.67em 0;
 }
 mark {
   background-color: #ff0;
@@ -69,10 +70,10 @@ sup {
   vertical-align: baseline;
 }
 sub {
-  bottom: -.25em;
+  bottom: -0.25em;
 }
 sup {
-  top: -.5em;
+  top: -0.5em;
 }
 img {
   border-style: none;
@@ -114,29 +115,29 @@ button,
 select {
   text-transform: none;
 }
-[type=reset],
-[type=submit],
+[type="reset"],
+[type="submit"],
 button,
-html [type=button] {
+html [type="button"] {
   -webkit-appearance: button;
 }
-[type=button]::-moz-focus-inner,
-[type=reset]::-moz-focus-inner,
-[type=submit]::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner,
 button::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
-[type=button]:-moz-focusring,
-[type=reset]:-moz-focusring,
-[type=submit]:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring,
 button:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
 fieldset {
   border: 1px solid silver;
   margin: 0 2px;
-  padding: .35em .625em .75em;
+  padding: 0.35em 0.625em 0.75em;
 }
 legend {
   box-sizing: border-box;
@@ -149,26 +150,26 @@ legend {
 textarea {
   overflow: auto;
 }
-[type=checkbox],
-[type=radio] {
+[type="checkbox"],
+[type="radio"] {
   box-sizing: border-box;
   padding: 0;
 }
-[type=number]::-webkit-inner-spin-button,
-[type=number]::-webkit-outer-spin-button {
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
   height: auto;
 }
-[type=search] {
+[type="search"] {
   -webkit-appearance: textfield;
   outline-offset: -2px;
 }
-[type=search]::-webkit-search-cancel-button,
-[type=search]::-webkit-search-decoration {
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 ::-webkit-input-placeholder {
   color: inherit;
-  opacity: .54;
+  opacity: 0.54;
 }
 ::-webkit-file-upload-button {
   -webkit-appearance: button;
@@ -222,9 +223,7 @@ h1 {
   color: inherit;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  font-weight: bold;
   text-rendering: optimizeLegibility;
-  font-size: 2.25rem;
   line-height: 1.1;
 }
 h2 {
@@ -616,5 +615,5 @@ pre tt:after {
 }
 
 svg > path {
-  fill: #264e86
+  fill: #264e86;
 }
