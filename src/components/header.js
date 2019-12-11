@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import Link from "gatsby-link";
-
 const linkStyle = { margin: "0.25em" };
 
 const ProfileImg = styled.img({
   borderRadius: "8em",
-  boxShadow: "2px 2px 5px 0px rgba(158,158,158,1)"
+  boxShadow: "2px 2px 5px 0px rgba(158,158,158,1)",
+  width: "135px"
 });
 
 const SmallText = styled.span({
