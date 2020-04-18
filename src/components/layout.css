@@ -617,3 +617,15 @@ pre tt:after {
 svg > path {
   fill: #264e86;
 }
+
+/* Typography */
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+h3,
+h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+}
