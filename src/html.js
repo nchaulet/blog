@@ -19,7 +19,7 @@ export default function HTML(props) {
           dangerouslySetInnerHTML={{
             __html: `
         WebFontConfig = {
-          google: { families: [ 'Roboto:400,600' ] }
+          google: { families: [ 'Roboto:400,600&display=swap' ] }
         };
         (function() {
           var wf = document.createElement('script');
