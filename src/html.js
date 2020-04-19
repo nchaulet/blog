@@ -12,12 +12,12 @@ export default function HTML(props) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         {props.headComponents}
+      </head>
+      <body {...props.bodyAttributes}>
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
           rel="stylesheet"
         />
-      </head>
-      <body {...props.bodyAttributes}>
         {props.preBodyComponents}
         <noscript key="noscript" id="gatsby-noscript">
           This app works best with JavaScript enabled.

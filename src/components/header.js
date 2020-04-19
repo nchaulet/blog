@@ -60,12 +60,7 @@ const Header = ({ siteTitle }) => (
           justifyContent: "center"
         }}
       >
-        <a
-          class="btn btn-large"
-          href="https://github.com/nchaulet"
-          style={linkStyle}
-          title="github"
-        >
+        <a href="https://github.com/nchaulet" style={linkStyle} title="github">
           <svg
             width="35"
             height="35"
@@ -76,7 +71,6 @@ const Header = ({ siteTitle }) => (
           </svg>
         </a>
         <a
-          class="btn btn-large"
           href="https://twitter.com/n_chaulet"
           style={linkStyle}
           title="twitter"
@@ -91,7 +85,6 @@ const Header = ({ siteTitle }) => (
           </svg>
         </a>
         <a
-          class="btn btn-large"
           href="https://www.linkedin.com/in/nchaulet/"
           style={linkStyle}
           title="mail"
@@ -106,7 +99,6 @@ const Header = ({ siteTitle }) => (
           </svg>
         </a>
         <a
-          class="btn btn-large"
           href="mailto:n.chaulet@gmail.com"
           rel="noopener noreferrer"
           style={linkStyle}
