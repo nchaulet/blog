@@ -14,10 +14,24 @@ export default function HTML(props) {
         {props.headComponents}
       </head>
       <body {...props.bodyAttributes}>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
-          rel="stylesheet"
-        />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+        WebFontConfig = {
+          google: { families: [ 'Roboto:400,600' ] }
+        };
+        (function() {
+          var wf = document.createElement('script');
+          wf.src = '//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+          wf.type = 'text/javascript';
+          wf.async = 'true';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(wf, s);
+        })();
+        `
+          }}
+        ></script>
         {props.preBodyComponents}
         <noscript key="noscript" id="gatsby-noscript">
           This app works best with JavaScript enabled.
