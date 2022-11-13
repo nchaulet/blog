@@ -5,7 +5,6 @@ import { graphql } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { MDXProvider } from "@mdx-js/react";
 import CodeBlock from "../components/code-block";
-import Disqus from "gatsby-plugin-disqus";
 
 const LabelH2 = styled.h2`
   background-color: #264e86;
@@ -37,12 +36,6 @@ function Template({
         <LabelH2>{frontmatter.date}</LabelH2>
         <h1>{frontmatter.title}</h1>
         <MDXRenderer>{body}</MDXRenderer>
-        <br />
-        <Disqus
-          identifier={frontmatter.path}
-          title={frontmatter.title}
-          url={`${siteUrl}${frontmatter.path}`}
-        />
       </div>
     </div>
   );

@@ -22,12 +22,6 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-plugin-disqus`,
-      options: {
-        shortname: `blog-nchaulet`
-      }
-    },
-    {
       resolve: `gatsby-plugin-feed`,
       options: {
         query: `
