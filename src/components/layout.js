@@ -8,13 +8,11 @@ import "./layout.css";
 import { Switch } from "./switch";
 import { ColorSchemeProvider, useColorScheme } from "../hooks/use_color_scheme";
 
-function isSSR() {
-  return !"window" in global;
-}
+const IS_SSR = !("window" in global);
 
 const Layout = ({ children, data, location }) => {
   const { colorScheme } = useColorScheme();
-  console.log(colorScheme, isSSR());
+
   return (
     <div>
       <Helmet
@@ -43,7 +41,7 @@ const Layout = ({ children, data, location }) => {
         />
         <html
           lang="en"
-          data-prefer-color-scheme={isSSR() ? undefined : colorScheme}
+          data-prefer-color-scheme={IS_SSR ? undefined : colorScheme}
         />
       </Helmet>
       {location.pathname === "/" ? (
