@@ -14,6 +14,7 @@ function isSSR() {
 
 const Layout = ({ children, data, location }) => {
   const { colorScheme } = useColorScheme();
+  console.log(colorScheme, isSSR());
   return (
     <div>
       <Helmet
@@ -42,7 +43,7 @@ const Layout = ({ children, data, location }) => {
         />
         <html
           lang="en"
-          data-prefer-color-scheme={isSSR ? undefined : colorScheme}
+          data-prefer-color-scheme={isSSR() ? undefined : colorScheme}
         />
       </Helmet>
       {location.pathname === "/" ? (
