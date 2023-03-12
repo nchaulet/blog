@@ -11,7 +11,6 @@ exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   const blogPostTemplate = path.resolve(`src/templates/post.js`);
-  console.log(blogPostTemplate);
   return graphql(`
     {
       allMdx(sort: { frontmatter: { date: DESC } }, limit: 1000) {
@@ -33,7 +32,6 @@ exports.createPages = ({ actions, graphql }) => {
     }
 
     result.data.allMdx.edges.forEach(({ node }) => {
-      console.log(node);
       createPage({
         path: node.frontmatter.path,
         component: `${blogPostTemplate}?__contentFilePath=${node.internal.contentFilePath}`

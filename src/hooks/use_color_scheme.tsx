@@ -7,11 +7,15 @@ import React, {
 } from "react";
 
 function getPreferredColorScheme() {
-  const storageScheme = localStorage?.getItem("color-scheme");
+  const storageScheme =
+    "window" in global
+      ? window.localStorage?.getItem("color-scheme")
+      : undefined;
 
   return storageScheme === "dark" || storageScheme == "light"
     ? storageScheme
-    : window?.matchMedia("(prefers-color-scheme: dark)").matches
+    : "window" in global &&
+      window?.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
 }
