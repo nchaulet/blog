@@ -8,6 +8,10 @@ import "./layout.css";
 import { Switch } from "./switch";
 import { ColorSchemeProvider, useColorScheme } from "../hooks/use_color_scheme";
 
+function isSSR() {
+  return !"window" in global;
+}
+
 const Layout = ({ children, data, location }) => {
   const { colorScheme } = useColorScheme();
   return (
@@ -36,7 +40,10 @@ const Layout = ({ children, data, location }) => {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-        <html lang="en" data-prefer-color-scheme={colorScheme} />
+        <html
+          lang="en"
+          data-prefer-color-scheme={isSSR ? undefined : colorScheme}
+        />
       </Helmet>
       {location.pathname === "/" ? (
         <Header siteTitle={data.site.siteMetadata.title} />
