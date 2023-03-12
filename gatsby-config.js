@@ -1,13 +1,35 @@
+const remarkGFM = import(`remark-gfm`);
+const remarkMDX = import(`remark-mdx`);
+
+const mdxCodeMeta = import("remark-mdx-code-meta");
+
+const wrapESMPlugin = name =>
+  function wrapESM(opts) {
+    return async (...args) => {
+      const mod = await import(name);
+      const plugin = mod.default(opts);
+      return plugin(...args);
+    };
+  };
+
 module.exports = {
   siteMetadata: {
     title: "Nicolas Chaulet - Web Developer",
     description: "Personal blog",
     siteUrl: `https://www.nchaulet.fr`
   },
+  trailingSlash: "never",
   plugins: [
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-styled-components",
-    "gatsby-plugin-mdx",
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        mdxOptions: {
+          remarkPlugins: [wrapESMPlugin("remark-mdx-code-meta")]
+        }
+      }
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

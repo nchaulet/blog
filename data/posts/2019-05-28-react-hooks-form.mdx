@@ -9,7 +9,7 @@ According to Dan Abramov and lot of users of the React API, Hooks are the future
 
 We are going to use a very common form to register a user: two inputs an email and a password.
 
-```js live=true
+```js live
 <form>
   <input placeholder="email" />
   <input type="password" placeholder="password" />
@@ -20,7 +20,7 @@ We are going to use a very common form to register a user: two inputs an email a
 Let's capture our input, for that we are going to create a hook `useInput` that is going to manage the state of our input.
 On submit we are going to trigger an alert with the content of our form.
 
-```js live=true noInline=true
+```js live noInline 
 function useInput(defaultValue = "") {
   const [value, setValue] = useState(defaultValue);
 
@@ -63,7 +63,7 @@ And add some validation, here we are using the Constraint API ([see doc](https:/
 The Constraint API is currently not totally supported by Internet Explorer.
 This API allow to mark an input as invalid with the `setCustomValidity()` method, you need to trigger the display of the message with a call to `reportValidity()`.
 
-```js live=true noInline=true
+```js live noInline
 function useInput(validateRegex = null, validateErrorMessage = null) {
   const defaultValue = "";
   const [value, setValue] = useState(defaultValue);

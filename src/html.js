@@ -11,29 +11,9 @@ export default function HTML(props) {
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
         {props.headComponents}
       </head>
       <body {...props.bodyAttributes}>
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-        WebFontConfig = {
-          google: { families: [ 'Roboto:400,600&display=swap' ] }
-        };
-        (function() {
-          var wf = document.createElement('script');
-          wf.src = '//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-          wf.type = 'text/javascript';
-          wf.async = 'true';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(wf, s);
-        })();
-        `
-          }}
-        ></script>
         {props.preBodyComponents}
         <noscript key="noscript" id="gatsby-noscript">
           This app works best with JavaScript enabled.

@@ -4,24 +4,24 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
- // You can delete this file if you're not using it
- const path = require("path");
+// You can delete this file if you're not using it
+const path = require("path");
 
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   const blogPostTemplate = path.resolve(`src/templates/post.js`);
-
+  console.log(blogPostTemplate);
   return graphql(`
     {
-      allMdx(
-        sort: { order: DESC, fields: [frontmatter___date] }
-        limit: 1000
-      ) {
+      allMdx(sort: { frontmatter: { date: DESC } }, limit: 1000) {
         edges {
           node {
             frontmatter {
               path
+            }
+            internal {
+              contentFilePath
             }
           }
         }
@@ -33,10 +33,10 @@ exports.createPages = ({ actions, graphql }) => {
     }
 
     result.data.allMdx.edges.forEach(({ node }) => {
+      console.log(node);
       createPage({
         path: node.frontmatter.path,
-        component: blogPostTemplate,
-        context: {}, // additional data can be passed via context
+        component: `${blogPostTemplate}?__contentFilePath=${node.internal.contentFilePath}`
       });
     });
   });

@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { COLORS } from "../constants";
 import { picture } from "./profile-picture";
+import { Switch } from "./switch";
 
 const linkStyle = { margin: "0.25em" };
 
@@ -26,7 +28,7 @@ const CompanyLink = styled.a`
 
 const Title = styled.h1({
   margin: 0,
-  color: "#264e86"
+  color: COLORS.DARK
 });
 
 const Header = ({ siteTitle }) => (
@@ -37,7 +39,17 @@ const Header = ({ siteTitle }) => (
   >
     <div
       style={{
-        margin: "2em auto",
+        margin: "0.5em auto",
+        maxWidth: 1100,
+        display: "flex",
+        justifyContent: "end"
+      }}
+    >
+      <Switch />
+    </div>
+    <div
+      style={{
+        margin: ".5em auto",
         maxWidth: 960,
         padding: "1.45rem 1.0875rem",
         textAlign: "center"
@@ -48,13 +60,15 @@ const Header = ({ siteTitle }) => (
         Nicolas Chaulet
         <SmallText>
           Developer{" "}
-          <CompanyLink href="https://www.elastic.co">@elastic</CompanyLink>
+          <CompanyLink target="_blank" href="https://www.elastic.co">
+            @elastic
+          </CompanyLink>
         </SmallText>
       </Title>
       <div
         style={{
           textAlign: "center",
-          color: "#264e86",
+          color: COLORS.DARK,
           marginTop: "1em",
           display: "flex",
           justifyContent: "center"

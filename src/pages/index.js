@@ -2,6 +2,7 @@ import React from "react";
 import PostLink from "../components/post-link";
 import Layout from "../components/layout";
 import { graphql } from "gatsby";
+import { COLORS } from "../constants";
 
 const IndexPage = ({
   data: {
@@ -17,15 +18,15 @@ const IndexPage = ({
 
 export default props => (
   <Layout location={props.location}>
-    <hr/>
-    <h2 style={{ color: "#264e86" }}>Latests posts</h2>
+    <hr />
+    <h2 style={{ color: COLORS.DARK }}>Latests posts</h2>
     <IndexPage {...props} />
   </Layout>
 );
 
 export const pageQuery = graphql`
   query IndexQuery {
-    allMdx(sort: { order: DESC, fields: [frontmatter___date] }) {
+    allMdx(sort: { frontmatter: { date: DESC } }) {
       edges {
         node {
           id
