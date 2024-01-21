@@ -4,7 +4,7 @@ import Layout from "../components/layout";
 import { graphql } from "gatsby";
 import { COLORS } from "../constants";
 
-const IndexPage = ({
+const PostList = ({
   data: {
     allMdx: { edges }
   }
@@ -16,13 +16,17 @@ const IndexPage = ({
   return <div>{Posts}</div>;
 };
 
-export default props => (
-  <Layout location={props.location}>
-    <hr />
-    <h2 style={{ color: COLORS.DARK }}>Latests posts</h2>
-    <IndexPage {...props} />
-  </Layout>
-);
+function IndexPage(props) {
+  return (
+    <Layout location={props.location}>
+      <hr />
+      <h2 style={{ color: COLORS.DARK }}>Latests posts</h2>
+      <PostList {...props} />
+    </Layout>
+  );
+}
+
+export default IndexPage;
 
 export const pageQuery = graphql`
   query IndexQuery {
