@@ -93,7 +93,7 @@ const query = graphql`
   }
 `;
 
-export default props => (
+const DefaultLayout = props => (
   <ColorSchemeProvider>
     <StaticQuery
       query={query}
@@ -101,3 +101,5 @@ export default props => (
     />
   </ColorSchemeProvider>
 );
+
+export default DefaultLayout;
